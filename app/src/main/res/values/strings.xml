@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TouristHelperApp</string>
+    <string name="home_Welcome_Message">Welcome, NAME</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
