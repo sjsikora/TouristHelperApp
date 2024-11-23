@@ -33,8 +33,10 @@ android {
 }
 
 dependencies {
+    val fragment_version = "1.8.5"
 
-    implementation(libs.fragment)
+    // Java language implementation
+    implementation("androidx.fragment:fragment:$fragment_version")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
