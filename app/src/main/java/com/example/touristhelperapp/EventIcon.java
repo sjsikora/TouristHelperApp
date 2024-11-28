@@ -1,12 +1,20 @@
 package com.example.touristhelperapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,15 +23,34 @@ import android.view.ViewGroup;
  */
 public class EventIcon extends Fragment {
 
-    private static final String ARG_PARAM1 = "photoLink";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PHOTOLINK = "photoLink";
+    private static final String ARG_EVENTNAME = "eventName";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String photoLink;
+    private String eventName;
 
     public EventIcon() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+        /*
+        ImageView eventIcon = view.findViewById(R.id.eventImage);
+        TextView eventText = view.findViewById(R.id.subtitle);
+
+        URL url = null;
+
+        try {
+            url = new URL(photoLink);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            eventIcon.setImageBitmap(bmp);
+        } catch (Error | IOException ignored) {}
+
+        eventText.setText(eventName);
+
+        */
     }
 
     /**
@@ -38,8 +65,8 @@ public class EventIcon extends Fragment {
     public static EventIcon newInstance(String param1, String param2) {
         EventIcon fragment = new EventIcon();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PHOTOLINK, param1);
+        args.putString(ARG_EVENTNAME, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,8 +75,8 @@ public class EventIcon extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            photoLink = getArguments().getString(ARG_PHOTOLINK);
+            eventName = getArguments().getString(ARG_EVENTNAME);
         }
     }
 

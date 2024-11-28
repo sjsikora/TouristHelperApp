@@ -19,15 +19,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/tripFragment"
         android:name="com.example.touristhelperapp.TripFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="207dp"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="204dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/eventFragment"
+        android:name="com.example.touristhelperapp.TripFragment"
+        android:layout_width="264dp"
+        android:layout_height="395dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripFragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

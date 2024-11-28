@@ -23,18 +23,27 @@ public class Home extends AppCompatActivity {
             return insets;
         });
 
-        createTripFragment("Trip Name", "Start Date", "End Date");
+        createTripFragment(R.id.tripFragment,
+                "Trip Name",
+                "Start Date",
+                "End Date"
+        );
 
+        createEventIconFragment(R.id.eventFragment,
+                "Photo Link",
+                "Event Name"
+        );
     }
 
     /**
      * This function will create a Trip Fragment.
      *
+     * @param id The ID of the fragment container R.id.<name>
      * @param tripName The name of the trip
      * @param startDate The start date of the trip
      * @param endDate The end date of the trip
      */
-    public void createTripFragment(String tripName, String startDate, String endDate) {
+    public void createTripFragment(int id, String tripName, String startDate, String endDate) {
         // This is a bundle, it works just like how intent does, but for
         // fragments. We put in key value pairs that will be read by our fragment.
         Bundle tripBundle = new Bundle();
@@ -46,7 +55,27 @@ public class Home extends AppCompatActivity {
         // This is how we create our fragment with our bundle.
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, TripFragment.class, tripBundle, "tag")
+                .replace(R.id.tripFragment, TripFragment.class, tripBundle, "tag")
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * This function will create an Event Icon Fragment for a given id.
+     *
+     * @param id The ID of the fragment container R.id.<name>
+     * @param photoLink The link to the icon of the event
+     * @param eventName The name of the event
+     */
+    public void createEventIconFragment(int id, String photoLink, String eventName) {
+        Bundle eventBundle = new Bundle();
+        eventBundle.putString("photoLink", photoLink);
+        eventBundle.putString("eventName", eventName);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.eventFragment, EventIcon.class, eventBundle, "tag")
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();

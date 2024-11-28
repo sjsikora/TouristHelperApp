@@ -25,8 +25,7 @@ public class TripFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        helloWorld = view.findViewById(R.id.helloWorld);
-        helloWorld.setText(tripName + " " + startDate + " " + endDate);
+
 
     }
 

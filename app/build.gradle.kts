@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.auth)
     val fragment_version = "1.8.5"
 
     // Java language implementation
