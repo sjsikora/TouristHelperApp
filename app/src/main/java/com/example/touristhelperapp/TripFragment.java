@@ -21,11 +21,17 @@ public class TripFragment extends Fragment {
     private String startDate;
     private String endDate;
 
-    TextView helloWorld;
+    TextView tripNameTextView;
+    TextView calenderNameTextView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        tripNameTextView = view.findViewById(R.id.tripName);
+        calenderNameTextView = view.findViewById(R.id.dateName);
+
+        tripNameTextView.setText(tripName);
+        calenderNameTextView.setText(String.format("%s - %s", startDate, endDate));
 
     }
 

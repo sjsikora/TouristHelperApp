@@ -1,6 +1,7 @@
 package com.example.touristhelperapp;
 
 import android.os.Bundle;
+import android.view.View;
 
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -24,14 +26,29 @@ public class Home extends AppCompatActivity {
         });
 
         createTripFragment(R.id.tripFragment,
-                "Trip Name",
-                "Start Date",
-                "End Date"
+                "Christmas With Grandma",
+                "December 23rd",
+                "30th, 2024"
         );
 
         createEventIconFragment(R.id.eventFragment,
-                "Photo Link",
-                "Event Name"
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/580px-The_Earth_seen_from_Apollo_17.jpg",
+                "Earth"
+        );
+
+        createEventIconFragment(R.id.eventFragment2,
+                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
+                "Kelowna"
+        );
+
+        createEventIconFragment(R.id.eventFragment3,
+                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
+                "Kelowna"
+        );
+
+        createEventIconFragment(R.id.eventFragment4,
+                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
+                "Kelowna"
         );
     }
 
@@ -55,7 +72,7 @@ public class Home extends AppCompatActivity {
         // This is how we create our fragment with our bundle.
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.tripFragment, TripFragment.class, tripBundle, "tag")
+                .replace(id, TripFragment.class, tripBundle, "tag")
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -75,9 +92,20 @@ public class Home extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.eventFragment, EventIcon.class, eventBundle, "tag")
+                .replace(id, EventIcon.class, eventBundle, "tag")
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
     }
+
+    /**
+     * This is called when user clicks on "See all my Trips"
+     *
+     * @param View The view that was clicked
+     *
+     */
+     public void seeAllMyTrips(View view) {
+         // TODO implement screen change
+     }
+
 }

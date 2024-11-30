@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">TouristHelperApp</string>
-    <string name="home_Welcome_Message">Welcome, NAME</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Home Screen Values-->
+    <string name="home_Welcome_Message">Welcome, John</string>
+    <string name="home_See_Trips">See all my trips</string>
+    <string name="home_Trip_Plan">Trip Plan</string>
+    <string name="home_upcoming">Upcoming</string>
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

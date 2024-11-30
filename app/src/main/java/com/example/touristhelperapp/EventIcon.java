@@ -33,24 +33,37 @@ public class EventIcon extends Fragment {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        /*
         ImageView eventIcon = view.findViewById(R.id.eventImage);
         TextView eventText = view.findViewById(R.id.subtitle);
 
-        URL url = null;
+        eventText.setText(eventName); // Set text directly
 
-        try {
-            url = new URL(photoLink);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            eventIcon.setImageBitmap(bmp);
-        } catch (Error | IOException ignored) {}
 
-        eventText.setText(eventName);
+        // We wrap downloading the image in a thread to avoid blocking the UI.
 
-        */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(photoLink);
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    // Once we get here, link back into the main thread
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            eventIcon.setImageBitmap(bmp);
+                        }
+                    });
+                } catch (IOException ignored) {}
+            }
+        }).start();
     }
 
     /**
