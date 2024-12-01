@@ -25,6 +25,8 @@ public class TripFragment extends Fragment {
     TextView calenderNameTextView;
 
     @Override
+    // After a fragment is created, run this function.
+    // Put any logic for the fragment in here. If you put it anywhere else it won't work.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         tripNameTextView = view.findViewById(R.id.tripName);

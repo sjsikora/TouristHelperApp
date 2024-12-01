@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "863102971147",
+    "project_id": "touristhelperapp",
+    "storage_bucket": "touristhelperapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863102971147:android:7df4b31e045293dd04460e",
+        "android_client_info": {
+          "package_name": "com.example.touristhelperapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9-wzSded1AkBoRoEl08NrKa3jdhaI7Wg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
