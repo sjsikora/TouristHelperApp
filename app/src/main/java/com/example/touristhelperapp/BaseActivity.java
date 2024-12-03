@@ -104,7 +104,7 @@ public class BaseActivity extends AppCompatActivity  {
         DatabaseReference tripsRef = root.child(path);
 
         // Push object into the DB
-        tripsRef.push().setValue((Trip)object);
+        tripsRef.push().setValue(object);
     }
 
     /**

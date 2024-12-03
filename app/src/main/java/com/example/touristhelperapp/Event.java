@@ -1,10 +1,13 @@
 package com.example.touristhelperapp;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
 
-public class Event {
+public class Event implements Parcelable {
     private String title;
     private ArrayList<String> factors;
     private Date startTime;
@@ -26,6 +29,43 @@ public class Event {
         this.location = location;
         this.imageURL = imageURL;
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(title);
+        out.writeStringList(factors);
+        out.writeSerializable(startTime);
+        out.writeSerializable(endTime);
+        out.writeString(description);
+        out.writeString(location);
+        out.writeString(imageURL);
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR
+            = new Parcelable.Creator<Event>() {
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+
+    private Event(Parcel in) {
+        title = in.readString();
+        factors = in.createStringArrayList();
+        startTime = (Date) in.readSerializable();
+        endTime = (Date) in.readSerializable();
+        description = in.readString();
+        location = in.readString();
+        imageURL = in.readString();
+    }
+
 
     public String getTitle() {
         return title;
