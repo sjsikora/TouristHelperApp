@@ -40,14 +40,8 @@ public class BaseActivity extends AppCompatActivity  {
         tripBundle.putString("startDate", startDate);
         tripBundle.putString("endDate", endDate);
 
-        // The FragmentManager is responsible for managing fragments.
-        // This is how we create our fragment with our bundle.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(id, TripFragment.class, tripBundle, "tag")
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+        fragmentManagerCreator(id, TripFragment.class, tripBundle);
+        
     }
 
     /**
@@ -62,12 +56,31 @@ public class BaseActivity extends AppCompatActivity  {
         eventBundle.putString("photoLink", photoLink);
         eventBundle.putString("eventName", eventName);
 
+        fragmentManagerCreator(id, EventIcon.class, eventBundle);
+    }
+
+    /**
+     * This function will call the FragmentManager to create a new fragment
+     * for specified id and class with associated bundle
+     *
+     * @param id The ID of the fragment container
+     * @param fragmentClass The class that you want to create a fragment out of
+     * @param bun The bundle of arugments that will be sent to the fragment.
+     */
+
+    protected void fragmentManagerCreator(
+            int id,
+            @NonNull Class<? extends androidx. fragment. app. Fragment> fragmentClass,
+            Bundle bun
+    ) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(id, EventIcon.class, eventBundle, "tag")
+                .replace(id, fragmentClass, bun, "tag")
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
+
     }
 
     /**
