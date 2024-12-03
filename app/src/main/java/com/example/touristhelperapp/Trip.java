@@ -3,13 +3,16 @@ package com.example.touristhelperapp;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Trip {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Trip implements Parcelable {
+
     private String name;
     private Date startDate;
     private Date endDate;
     private ArrayList<Event> events;
     private ArrayList<String> factors;
-
 
     public Trip() {}
 
@@ -21,6 +24,38 @@ public class Trip {
         this.factors = factors;
     }
 
+    // PARCELABLE METHODS
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeSerializable(startDate);
+        out.writeSerializable(endDate);
+        out.writeTypedList(events);
+        out.writeStringList(factors);
+    }
+
+    public static final Parcelable.Creator<Trip> CREATOR
+            = new Parcelable.Creator<Trip>() {
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
+
+    private Trip(Parcel in) {
+        name = in.readString();
+        startDate = (Date) in.readSerializable();
+        endDate = (Date) in.readSerializable();
+        events = in.createTypedArrayList(Event.CREATOR);
+        factors = in.createStringArrayList();
+    }
+
+    public int describeContents() {
+        return 0;
+    }
 
     public String getName() {
         return name;
