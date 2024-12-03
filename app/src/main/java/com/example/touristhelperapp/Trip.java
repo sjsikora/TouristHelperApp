@@ -8,12 +8,12 @@ public class Trip {
     private Date startDate;
     private Date endDate;
     private ArrayList<Event> events;
-    private String[] factors;
+    private ArrayList<String> factors;
 
 
     public Trip() {}
 
-    public Trip(String name, Date startDate, Date endDate, ArrayList<Event> events, String[] factors) {
+    public Trip(String name, Date startDate, Date endDate, ArrayList<Event> events, ArrayList<String> factors) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -54,11 +54,22 @@ public class Trip {
         this.events = events;
     }
 
-    public String[] getFactors() {
+    public ArrayList<String> getFactors() {
         return factors;
     }
 
-    public void setFactors(String[] factors) {
+    public void setFactors(ArrayList<String> factors) {
         this.factors = factors;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "name='" + name + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", events=" + events +
+                ", factors=" + factors +
+                '}';
     }
 }

@@ -1,10 +1,12 @@
 package com.example.touristhelperapp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 
 public class Event {
     private String title;
-    private String[] factors;
+    private ArrayList<String> factors;
     private Date startTime;
     private Date endTime;
     private String description;
@@ -14,7 +16,8 @@ public class Event {
     // Needed for FB
     public Event() {}
 
-    public Event(String title, String[] factors, Date startTime, Date endTime, String description, String location, String imageURL) {
+    public Event(String title, ArrayList<String> factors, Date startTime, Date endTime,
+                 String description, String location, String imageURL) {
         this.title = title;
         this.factors = factors;
         this.startTime = startTime;
@@ -32,11 +35,11 @@ public class Event {
         this.title = title;
     }
 
-    public String[] getFactors() {
+    public ArrayList<String> getFactors() {
         return factors;
     }
 
-    public void setFactors(String[] factors) {
+    public void setFactors(ArrayList<String> factors) {
         this.factors = factors;
     }
 
@@ -78,5 +81,18 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "title='" + title + '\'' +
+                ", factors=" + factors +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                '}';
     }
 }
