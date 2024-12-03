@@ -9,6 +9,8 @@ public class Trip {
     private Date endDate;
     private ArrayList<Event> events;
 
+    public Trip() {}
+
     public Trip(String name) {
         this.name = name;
         this.events = new ArrayList<>();
