@@ -5,18 +5,31 @@ import java.util.Date;
 public class Event {
     private String title;
     private String[] factors;
-    private Date dateTime;
+    private Date startTime;
+    private Date endTime;
     private String description;
     private String location;
+    private String imageURL;
 
+    // Needed for FB
     public Event() {}
 
-    public Event(String title, String[] factors, String description, Date dateTime, String location) {
+    public Event(String title, String[] factors, Date startTime, Date endTime, String description, String location, String imageURL) {
         this.title = title;
         this.factors = factors;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.description = description;
-        this.dateTime = dateTime;
         this.location = location;
+        this.imageURL = imageURL;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String[] getFactors() {
@@ -27,15 +40,43 @@ public class Event {
         this.factors = factors;
     }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public Date getStartTime() {
+        return startTime;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-    public Date getDateTime() { return dateTime; }
-    public void setDateTime(Date dateTime) { this.dateTime = dateTime; }
+    public Date getEndTime() {
+        return endTime;
+    }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

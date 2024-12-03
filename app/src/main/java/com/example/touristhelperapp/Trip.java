@@ -8,12 +8,26 @@ public class Trip {
     private Date startDate;
     private Date endDate;
     private ArrayList<Event> events;
+    private String[] factors;
+
 
     public Trip() {}
 
-    public Trip(String name) {
+    public Trip(String name, Date startDate, Date endDate, ArrayList<Event> events, String[] factors) {
         this.name = name;
-        this.events = new ArrayList<>();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.events = events;
+        this.factors = factors;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getStartDate() {
@@ -32,13 +46,19 @@ public class Trip {
         this.endDate = endDate;
     }
 
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
+
     public void setEvents(ArrayList<Event> events) {
         this.events = events;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String[] getFactors() {
+        return factors;
+    }
 
-    public ArrayList<Event> getEvents() { return events; }
-    public void addEvent(Event event) { this.events.add(event); }
+    public void setFactors(String[] factors) {
+        this.factors = factors;
+    }
 }
