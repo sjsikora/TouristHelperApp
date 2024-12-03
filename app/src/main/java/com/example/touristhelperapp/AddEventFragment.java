@@ -37,7 +37,6 @@ public class AddEventFragment extends TripFragment {
 
         TextView eventTitle = view.findViewById(R.id.eventTitle);
         TextView eventDescription = view.findViewById(R.id.eventDescription);
-        TextView eventDateTime = view.findViewById(R.id.eventDateTime);
         TextView eventLocation = view.findViewById(R.id.eventLocation);
         tripDropdown = view.findViewById(R.id.tripDropdown);
         Button addToTripButton = view.findViewById(R.id.addToTripButton);
