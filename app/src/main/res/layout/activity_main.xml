@@ -13,8 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:fontFamily="casual"
         android:text="Upcoming..."
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView4" />
 
@@ -24,8 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="casual"
         android:text="@string/home_Welcome_Message"
         android:textSize="30dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,10 +83,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:fontFamily="casual"
         android:onClick="seeAllMyTrips"
         android:text="@string/home_See_Trips"
         android:textColor="#3F51B5"
         android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/welcomeTextView"
         app:layout_constraintStart_toEndOf="@+id/welcomeTextView"
         app:layout_constraintTop_toTopOf="@+id/welcomeTextView" />
@@ -105,9 +111,11 @@
         android:layout_marginStart="3dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="3dp"
+        android:fontFamily="casual"
         android:text="@string/home_Trip_Plan"
         android:textColor="#3F51B5"
         android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"

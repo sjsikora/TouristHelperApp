@@ -1,5 +1,6 @@
 package com.example.touristhelperapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +19,8 @@ public class Home extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -59,7 +62,8 @@ public class Home extends BaseActivity {
      *
      */
      public void seeAllMyTrips(View view) {
-         // TODO implement screen change
+         Intent intent = new Intent(this, ViewTrips.class);
+         startActivity(intent);
      }
 
 }
