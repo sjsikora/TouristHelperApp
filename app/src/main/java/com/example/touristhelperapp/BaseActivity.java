@@ -13,10 +13,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity  {
 
-    DatabaseReference root;
+    private DatabaseReference root;
 
     /*
         Here is a way to share functions between activities.
@@ -73,7 +74,7 @@ public class BaseActivity extends AppCompatActivity  {
      * This function will initialize a reference to the Firebase object.
      * Run this function before any FB operations.
      */
-    protected void initializeFB() {
+    private void initializeFB() {
         root = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -98,10 +99,13 @@ public class BaseActivity extends AppCompatActivity  {
      *
      * @param path The path to read from
      * @param classType The class to cast to
+     * @param callback The callback function
      */
-    protected <T> ArrayList<T> getObjectsFromPath(String path, Class<T> classType) {
+    private <T> void getObjectsFromPath(String path, Class<T> classType,
+                                                  Consumer<ArrayList<T>> callback) {
         if(root == null) initializeFB();
         DatabaseReference tripsRef = root.child(path);
+
 
         ArrayList<T> list = new ArrayList<>();
         tripsRef.addValueEventListener(new ValueEventListener() {
@@ -110,6 +114,8 @@ public class BaseActivity extends AppCompatActivity  {
                 for (DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {
                     list.add(tripSnapshot.getValue(classType));
                 }
+
+                callback.accept(list);
             }
 
             @Override
@@ -117,8 +123,6 @@ public class BaseActivity extends AppCompatActivity  {
 
             }
         });
-
-        return list;
     }
 
     /**
@@ -132,9 +136,11 @@ public class BaseActivity extends AppCompatActivity  {
 
     /**
      * Return all trips from the DB.
+     *
+     * @param callback When read is read, call this function
      */
-    protected ArrayList<Trip> getTrips() {
-        return getObjectsFromPath("trips", Trip.class);
+    protected void getTrips(Consumer<ArrayList<Trip>> callback) {
+        getObjectsFromPath("trips", Trip.class, callback);
     }
 
     /**
@@ -149,8 +155,8 @@ public class BaseActivity extends AppCompatActivity  {
      * Return all events from the DB.
      *
      */
-    protected ArrayList<Event> getEvents() {
-        return getObjectsFromPath("events", Event.class);
+    protected void getEvents(Consumer<ArrayList<Event>> callback) {
+        getObjectsFromPath("events", Event.class, callback);
     }
 
     /**
@@ -164,9 +170,11 @@ public class BaseActivity extends AppCompatActivity  {
 
     /**
      * Get all business owner events.
+     *
+     * @param callback When read is read, call this function.
      */
-    protected ArrayList<Event> getAllBusinessOwnerEvents() {
-        return getObjectsFromPath("eventsBO", Event.class);
+    protected void getAllBusinessOwnerEvents(Consumer<ArrayList<Event>> callback) {
+        getObjectsFromPath("eventsBO", Event.class, callback);
     }
 
 }
