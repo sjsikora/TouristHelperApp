@@ -44,6 +44,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/eventFrag2"
+        android:name="com.example.touristhelperapp.TripFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/eventFrag4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eventFrag1"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/eventFrag4"
+        android:name="com.example.touristhelperapp.TripFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eventFrag3"
+        app:layout_constraintTop_toBottomOf="@+id/eventFrag2" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/eventFrag3"
+        android:name="com.example.touristhelperapp.TripFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/eventFrag4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFrag1" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/eventFrag1"
+        android:name="com.example.touristhelperapp.TripFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/eventFrag3"
+        app:layout_constraintEnd_toStartOf="@+id/eventFrag2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="288dp"
@@ -54,29 +98,6 @@
         android:queryHint="Search..."
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tripFragment" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/eventFragment3"
-        android:name="com.example.touristhelperapp.EventIcon"
-        android:layout_width="153dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintEnd_toStartOf="@+id/eventFragment2"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventFragment" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/eventFragment2"
-        android:name="com.example.touristhelperapp.EventIcon"
-        android:layout_width="153dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/eventFragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/eventFragment"
-        app:layout_constraintTop_toTopOf="@+id/eventFragment" />
 
     <TextView
         android:id="@+id/seeAllMyTrip"
@@ -92,17 +113,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/welcomeTextView"
         app:layout_constraintStart_toEndOf="@+id/welcomeTextView"
         app:layout_constraintTop_toTopOf="@+id/welcomeTextView" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/eventFragment4"
-        android:name="com.example.touristhelperapp.EventIcon"
-        android:layout_width="153dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toEndOf="@+id/eventFragment"
-        app:layout_constraintTop_toBottomOf="@+id/eventFragment2" />
 
     <TextView
         android:id="@+id/tripPlanView"
@@ -125,11 +135,9 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/eventFragment"
         android:name="com.example.touristhelperapp.TripFragment"
-        android:layout_width="153dp"
-        android:layout_height="157dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toStartOf="@+id/eventFragment2"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
