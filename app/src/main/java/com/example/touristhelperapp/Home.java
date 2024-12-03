@@ -31,22 +31,22 @@ public class Home extends BaseActivity {
                 "30th, 2024"
         );
 
-        createEventIconFragment(R.id.eventFragment,
+        createEventIconFragment(R.id.eventFrag1,
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/580px-The_Earth_seen_from_Apollo_17.jpg",
                 "Earth"
         );
 
-        createEventIconFragment(R.id.eventFragment2,
+        createEventIconFragment(R.id.eventFrag2,
                 "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
                 "Kelowna"
         );
 
-        createEventIconFragment(R.id.eventFragment3,
+        createEventIconFragment(R.id.eventFrag3,
                 "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
                 "Kelowna"
         );
 
-        createEventIconFragment(R.id.eventFragment4,
+        createEventIconFragment(R.id.eventFrag4,
                 "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
                 "Kelowna"
         );
@@ -55,7 +55,7 @@ public class Home extends BaseActivity {
     /**
      * This is called when user clicks on "See all my Trips"
      *
-     * @param View The view that was clicked
+     * @param view The view that was clicked
      *
      */
      public void seeAllMyTrips(View view) {
