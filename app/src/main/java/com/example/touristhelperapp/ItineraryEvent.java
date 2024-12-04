@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class ItineraryEvent extends Fragment {
 
@@ -16,11 +17,20 @@ public class ItineraryEvent extends Fragment {
 
     private Event event;
 
+    TextView eventTitle;
+    TextView eventDescription;
+
     public ItineraryEvent() {}
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        eventTitle = view.findViewById(R.id.eventTitle);
+        eventDescription = view.findViewById(R.id.eventDescription);
+
+        eventTitle.setText(event.getTitle());
+        eventDescription.setText(event.getDescription());
 
     }
 

@@ -107,4 +107,5 @@ public class Trip implements Parcelable {
                 ", factors=" + factors +
                 '}';
     }
+
 }

@@ -12,9 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ItineraryDay extends Fragment {
 
@@ -29,28 +32,16 @@ public class ItineraryDay extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(eventsList == null) {
-            Event e = new Event("Christmas With Grandma", null, new Date(), new Date(),
-                    "Grandma's birthday", "location", "imageURL");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(eventsList.get(0).getStartTime());
+        String day = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
-            for(int i = 0; i < 2; i++) {
-                Bundle bun = new Bundle();
-                bun.putParcelable("event", e);
+        TextView tripDayName = view.findViewById(R.id.tripDayName);
+        tripDayName.setText(String.format("%s %s", day, month));
 
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .add(uniqueContainerId, ItineraryEvent.class, bun, "tag" + i)
-                        .commit();
 
-            }
-
-            return;
-
-        }
-
-        /*
-        // For every event in this data make a new Itinerary Event
-        for (Event event : eventsList) {
+        for(Event event : eventsList) {
 
             Bundle bun = new Bundle();
             bun.putParcelable("event", event);
@@ -61,7 +52,6 @@ public class ItineraryDay extends Fragment {
                     .commit();
         }
 
-         */
     }
 
     @Override

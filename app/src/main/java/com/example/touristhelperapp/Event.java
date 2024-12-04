@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-public class Event implements Parcelable {
+public class Event implements Parcelable, Comparable<Event> {
     private String title;
     private ArrayList<String> factors;
     private Date startTime;
@@ -135,4 +135,16 @@ public class Event implements Parcelable {
                 ", imageURL='" + imageURL + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(Event event) {
+        if(this.startTime.after(event.startTime)) {
+            return 1;
+        } else if(this.startTime.before(event.startTime)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
 }
