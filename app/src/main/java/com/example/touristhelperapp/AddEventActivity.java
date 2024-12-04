@@ -1,11 +1,9 @@
 package com.example.touristhelperapp;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
@@ -33,37 +31,32 @@ public class AddEventActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        // Unpack Event object from Intent extras
         Intent intent = getIntent();
         event = (Event) intent.getSerializableExtra("event");
 
-        // Initialize UI elements
         eventTitleTextView = findViewById(R.id.eventTitle);
         factorsTextView = findViewById(R.id.Factors);
         eventDescriptionTextView = findViewById(R.id.eventDescription);
         startTimeTextView = findViewById(R.id.startTime);
         endTimeTextView = findViewById(R.id.endTime);
         eventLocationTextView = findViewById(R.id.eventLocation);
-        View eventImageView = findViewById(R.id.eventImage);
         tripDropdown = findViewById(R.id.tripDropdown);
         Button addToTripButton = findViewById(R.id.addToTripButton);
 
-        // Display Event Information
         displayEventInformation();
 
-        // Retrieve Trips and populate the spinner
         runOnUiThread(() -> {
-            ArrayList<Trip> trips = getTrips(); // Directly call getTrips()
+            ArrayList<Trip> trips = getTrips();
             populateTripDropdown(trips);
         });
 
-        // Set Button Click Listener
         addToTripButton.setOnClickListener(view -> {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
             addToTrip(selectedTrip);
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void displayEventInformation() {
         eventTitleTextView.setText(event.getTitle());
         factorsTextView.setText("Factors: " + String.join(", ", event.getFactors()));
@@ -80,11 +73,10 @@ public class AddEventActivity extends BaseActivity {
     }
 
     private void populateTripDropdown(ArrayList<Trip> trips) {
-        // Set up the spinner with trips
         ArrayAdapter<Trip> adapter = new ArrayAdapter<>(
-                this, // Pass the current context
+                this,
                 android.R.layout.simple_spinner_item,
-                trips // Use the passed trips list
+                trips
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tripDropdown.setAdapter(adapter);

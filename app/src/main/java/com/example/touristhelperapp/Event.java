@@ -1,5 +1,7 @@
 package com.example.touristhelperapp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Event {
@@ -79,4 +81,5 @@ public class Event {
     public void setLocation(String location) {
         this.location = location;
     }
+
 }

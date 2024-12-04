@@ -13,6 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity  {
@@ -92,6 +94,37 @@ public class BaseActivity extends AppCompatActivity  {
 
         // Push object into the DB
         tripsRef.push().setValue((Trip)object);
+    }
+
+    //like pushObject, but for events. Also serializes it as a String/Object map and stores them with a unique key.
+    private void saveEvent(String path, String key, Event event) {
+
+        if (root == null) {
+            initializeFB();
+        }
+
+        DatabaseReference eventRef = root.child(path);
+
+        if (key == null || key.isEmpty()) {
+            //Firebase has a key system we can use to avoid duplicating stuff
+            key = eventRef.push().getKey();
+        }
+
+        if (key != null) {
+            //store as a serialized map instead of just storing the object
+            Map<String, Object> eventMap = serializeEvent(event);
+
+            String finalKey = key;
+            eventRef.child(key).setValue(eventMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    System.out.println("Event saved at path: " + path + "/" + finalKey);
+                } else {
+                    System.err.println("Error - failed to save event: " + task.getException());
+                }
+            });
+        } else {
+            System.err.println("Failed to generate a valid key for event.");
+        }
     }
 
     /**
@@ -230,5 +263,18 @@ public class BaseActivity extends AppCompatActivity  {
     protected ArrayList<Event> getAllBusinessOwnerEvents() {
         return getObjectsFromPath("eventsBO", Event.class);
     }
+
+    private Map<String, Object> serializeEvent(Event event) {
+        Map<String, Object> eventMap = new HashMap<>();
+        eventMap.put("title", event.getTitle());
+        eventMap.put("factors", event.getFactors());
+        eventMap.put("startTime", event.getStartTime() != null ? event.getStartTime().getTime() : null);
+        eventMap.put("endTime", event.getEndTime() != null ? event.getEndTime().getTime() : null);
+        eventMap.put("description", event.getDescription());
+        eventMap.put("location", event.getLocation());
+        eventMap.put("imageURL", event.getImageURL());
+        return eventMap;
+    }
+
 
 }
