@@ -6,7 +6,7 @@ import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Trip implements Parcelable {
+public class Trip implements Parcelable, Comparable<Trip> {
 
     private String name;
     private Date startDate;
@@ -108,4 +108,14 @@ public class Trip implements Parcelable {
                 '}';
     }
 
+    @Override
+    public int compareTo(Trip other) {
+        if(this.startDate.after(other.startDate)) {
+            return 1;
+        } else if(this.startDate.before(other.startDate)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 }

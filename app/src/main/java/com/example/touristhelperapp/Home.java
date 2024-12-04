@@ -9,6 +9,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public class Home extends BaseActivity {
 
     @Override
@@ -25,31 +29,49 @@ public class Home extends BaseActivity {
             return insets;
         });
 
-        createTripFragment(R.id.tripFragment,
-                "Christmas With Grandma",
-                "December 23rd",
-                "30th, 2024"
-        );
+        retrieveData();
+    }
 
-        createEventIconFragment(R.id.eventFrag1,
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/580px-The_Earth_seen_from_Apollo_17.jpg",
-                "Earth"
-        );
+    /**
+     * This function will retrieve our data needed for the home page.
+     */
+    public void retrieveData() {
 
-        createEventIconFragment(R.id.eventFrag2,
-                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
-                "Kelowna"
-        );
+        // Get trips from the DB
+        getTrips(trips -> {
 
-        createEventIconFragment(R.id.eventFrag3,
-                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
-                "Kelowna"
-        );
+            if(trips == null || trips.isEmpty()) return;
 
-        createEventIconFragment(R.id.eventFrag4,
-                "https://www.kelowna.ca/sites/files/1/uploads/banners/inside/2023_city_view_from_knox_mountain.jpg",
-                "Kelowna"
-        );
+
+            // Sort the trips so the next trip is the first one
+            Collections.sort(trips);
+
+            // Get that trip and display
+            Trip nextTrip = trips.get(0);
+            createTripFragment(R.id.tripFragment, nextTrip);
+        });
+
+
+
+        int[] ids = {
+                R.id.eventFrag1,
+                R.id.eventFrag2,
+                R.id.eventFrag3,
+                R.id.eventFrag4
+        };
+
+        getEvents(events -> {
+
+            int limit = ids.length;
+
+            if(events.size() < ids.length) limit = events.size();
+
+            for(int i = 0; i < limit; i++) {
+                Event event = events.get(i);
+                createEventIconFragment(ids[i], event);
+            }
+
+        });
     }
 
     /**
@@ -59,6 +81,8 @@ public class Home extends BaseActivity {
      *
      */
      public void seeAllMyTrips(View view) {
+         Intent intent = new Intent(this, ViewTrips.class);
+         startActivity(intent);
      }
 
     /**

@@ -28,17 +28,14 @@ public class BaseActivity extends AppCompatActivity  {
      * This function will create a Trip Fragment.
      *
      * @param id The ID of the fragment container R.id.<name>
-     * @param tripName The name of the trip
-     * @param startDate The start date of the trip
-     * @param endDate The end date of the trip
+     * @param trip The trip to be placed in the fragment
+     *
      */
-    protected void createTripFragment(int id, String tripName, String startDate, String endDate) {
+    protected void createTripFragment(int id, Trip trip) {
         // This is a bundle, it works just like how intent does, but for
         // fragments. We put in key value pairs that will be read by our fragment.
         Bundle tripBundle = new Bundle();
-        tripBundle.putString("tripName", tripName);
-        tripBundle.putString("startDate", startDate);
-        tripBundle.putString("endDate", endDate);
+        tripBundle.putParcelable("trip", trip);
 
         fragmentManagerCreator(id, TripFragment.class, tripBundle);
         
@@ -48,13 +45,11 @@ public class BaseActivity extends AppCompatActivity  {
      * This function will create an Event Icon Fragment for a given id.
      *
      * @param id The ID of the fragment container R.id.<name>
-     * @param photoLink The link to the icon of the event
-     * @param eventName The name of the event
+     * @param event The event to be placed in the fragment
      */
-    protected void createEventIconFragment(int id, String photoLink, String eventName) {
+    protected void createEventIconFragment(int id, Event event) {
         Bundle eventBundle = new Bundle();
-        eventBundle.putString("photoLink", photoLink);
-        eventBundle.putString("eventName", eventName);
+        eventBundle.putParcelable("event", event);
 
         fragmentManagerCreator(id, EventIcon.class, eventBundle);
     }
@@ -75,6 +70,9 @@ public class BaseActivity extends AppCompatActivity  {
     ) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(fragmentManager.isStateSaved()) return;
+
         fragmentManager.beginTransaction()
                 .replace(id, fragmentClass, bun, "tag")
                 .setReorderingAllowed(true)
