@@ -136,49 +136,6 @@ public class BaseActivity extends AppCompatActivity  {
      * @param event The event to add to the trip.
      * @param callback A callback to handle success or failure.
      */
-    /**
-     * Add an event to a trip identified by its name in the Firebase database.
-     *
-     * @param tripName The name of the trip to update
-     * @param event The event to add to the trip
-     */
-    protected void addEventToTrip(String tripName, Event event) {
-        if (root == null) initializeFB();
-        DatabaseReference tripsRef = root.child("trips");
-
-        tripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot tripSnapshot : snapshot.getChildren()) {
-                    Trip trip = tripSnapshot.getValue(Trip.class);
-                    if (trip != null && tripName.equals(trip.getName())) {
-                        // Trip found, update its events
-                        if (trip.getEvents() == null) {
-                            trip.setEvents(new ArrayList<>());
-                        }
-                        trip.addEvent(event);
-
-                        // Update the trip in Firebase
-                        tripSnapshot.getRef().setValue(trip).addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                System.out.println("Event added successfully to trip: " + tripName);
-                            } else {
-                                System.err.println("Failed to add event to trip: " + tripName);
-                            }
-                        });
-                        return; // Exit after updating the trip
-                    }
-                }
-                System.err.println("Trip not found: " + tripName);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.err.println("Database error: " + error.getMessage());
-            }
-        });
-    }
-
 
     /**
      * This function will create a new trip in the DB.
@@ -187,6 +144,52 @@ public class BaseActivity extends AppCompatActivity  {
      */
     protected void createTrip(Trip trip) {
         pushObject("trips", trip);
+    }
+
+    /**
+     * Add an event to a trip identified by its name in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     */
+    protected void addEventToTrip(String tripName, Event event) {
+        if (root == null) {
+            initializeFB();
+        }
+        DatabaseReference tripRef = (DatabaseReference) root.child("trips").orderByChild("name").equalTo(tripName);
+
+        tripRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot tripSnapshot : snapshot.getChildren()) {
+                        Trip trip = tripSnapshot.getValue(Trip.class);
+                        if (trip != null) {
+                            if (trip.getEvents() == null) {
+                                trip.setEvents(new ArrayList<>());
+                            }
+                            trip.addEvent(event);
+
+                            tripSnapshot.getRef().setValue(trip).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    System.out.println("Event added successfully to trip: " + tripName);
+                                } else {
+                                    System.err.println("Failed to add event to trip: " + tripName);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                } else {
+                    System.err.println("Trip not found: " + tripName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.err.println("Database error: " + error.getMessage());
+            }
+        });
     }
 
     /**
