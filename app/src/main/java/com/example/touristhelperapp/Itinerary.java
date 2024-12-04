@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
 
 public class Itinerary extends AppCompatActivity {
 
@@ -20,5 +21,18 @@ public class Itinerary extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        for(int i = 0; i < 3; i++) {
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.eventDay, ItineraryDay.class, null, "tag" + i)
+                    .commit();
+
+        }
+
+
+
+
     }
 }

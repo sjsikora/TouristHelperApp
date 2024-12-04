@@ -31,7 +31,7 @@
         android:id="@+id/imageView"
         android:layout_width="375dp"
         android:layout_height="70dp"
-        android:src="@drawable/backThick"
+        android:src="@drawable/back_thick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
