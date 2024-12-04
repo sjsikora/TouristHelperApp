@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class Trip {
     private String name;
-    private Date startDate;
-    private Date endDate;
+    private Date startTime;
+    private Date endTime;
     private ArrayList<Event> events;
     private String[] factors;
 
@@ -15,8 +15,8 @@ public class Trip {
 
     public Trip(String name, Date startDate, Date endDate, ArrayList<Event> events, String[] factors) {
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startDate;
+        this.endTime = endDate;
         this.events = events;
         this.factors = factors;
     }
@@ -30,20 +30,20 @@ public class Trip {
         this.name = name;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartTime(Date startDate) {
+        this.startTime = startDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndTime(Date endDate) {
+        this.endTime = endDate;
     }
 
     public ArrayList<Event> getEvents() {
