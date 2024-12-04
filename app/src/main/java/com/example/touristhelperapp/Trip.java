@@ -61,4 +61,8 @@ public class Trip {
     public void setFactors(String[] factors) {
         this.factors = factors;
     }
+
+    public void addEvent(Event event) {
+        events.add(event);
+    }
 }

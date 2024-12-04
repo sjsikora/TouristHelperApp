@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity  {
 
@@ -120,6 +121,64 @@ public class BaseActivity extends AppCompatActivity  {
 
         return list;
     }
+
+    /**
+     * Add an event to an existing trip in the Firebase database.
+     *
+     * @param tripId The ID of the trip to update.
+     * @param event The event to add to the trip.
+     * @param callback A callback to handle success or failure.
+     */
+    /**
+     * Add an event to a specific trip in Firebase.
+     *
+     * @param tripId The ID of the trip to update.
+     * @param event The event to add to the trip.
+     * @param callback A callback to handle success or failure.
+     */
+    /**
+     * Add an event to a trip identified by its name in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     */
+    protected void addEventToTrip(String tripName, Event event) {
+        if (root == null) initializeFB();
+        DatabaseReference tripsRef = root.child("trips");
+
+        tripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot tripSnapshot : snapshot.getChildren()) {
+                    Trip trip = tripSnapshot.getValue(Trip.class);
+                    if (trip != null && tripName.equals(trip.getName())) {
+                        // Trip found, update its events
+                        if (trip.getEvents() == null) {
+                            trip.setEvents(new ArrayList<>());
+                        }
+                        trip.addEvent(event);
+
+                        // Update the trip in Firebase
+                        tripSnapshot.getRef().setValue(trip).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                System.out.println("Event added successfully to trip: " + tripName);
+                            } else {
+                                System.err.println("Failed to add event to trip: " + tripName);
+                            }
+                        });
+                        return; // Exit after updating the trip
+                    }
+                }
+                System.err.println("Trip not found: " + tripName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.err.println("Database error: " + error.getMessage());
+            }
+        });
+    }
+
 
     /**
      * This function will create a new trip in the DB.
