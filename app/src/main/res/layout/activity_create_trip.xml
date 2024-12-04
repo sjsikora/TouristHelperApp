@@ -14,7 +14,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="6dp"
         android:fontFamily="casual"
-        android:text="From:"
+        android:text="To:"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/editTextDate2"
         app:layout_constraintTop_toTopOf="@+id/editTextDate2" />
@@ -187,6 +187,7 @@
         android:layout_marginBottom="69dp"
         android:backgroundTint="#4036BF"
         android:fontFamily="casual"
+        android:onClick="onSubmitCreateNewTrip"
         android:text="Create Trip"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,7 +202,9 @@
         android:layout_marginStart="39dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
+        android:fontFamily="casual"
         android:text="Factors:"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/checkbox_notability"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/checkbox_notability" />
