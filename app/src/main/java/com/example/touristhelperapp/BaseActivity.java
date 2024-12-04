@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity  {
 
-    private DatabaseReference root;
+    protected DatabaseReference root;
 
     /*
         Here is a way to share functions between activities.
@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity  {
      * This function will initialize a reference to the Firebase object.
      * Run this function before any FB operations.
      */
-    private void initializeFB() {
+    void initializeFB() {
         root = FirebaseDatabase.getInstance().getReference();
     }
 

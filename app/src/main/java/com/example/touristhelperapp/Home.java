@@ -63,4 +63,14 @@ public class Home extends BaseActivity {
          startActivity(intent);
      }
 
+    /**
+     * Function called when user clicks on wrench on home screen
+     * It will take them to the Admin panel where we can switch to
+     * business view and setup FB
+     */
+    public void showAdminPanel(View view) {
+        Intent intent = new Intent(this, AdminPanel.class);
+        startActivity(intent);
+    }
+
 }
