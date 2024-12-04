@@ -73,4 +73,9 @@ public class Home extends BaseActivity {
         startActivity(intent);
     }
 
+    public void goToSearchForEvents(View view) {
+        Intent intent = new Intent(this, SearchForEvents.class);
+        startActivity(intent);
+    }
+
 }
