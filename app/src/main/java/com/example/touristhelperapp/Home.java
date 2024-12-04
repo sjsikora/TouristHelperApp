@@ -59,8 +59,6 @@ public class Home extends BaseActivity {
      *
      */
      public void seeAllMyTrips(View view) {
-         Intent intent = new Intent(this, ViewTrips.class);
-         startActivity(intent);
      }
 
     /**

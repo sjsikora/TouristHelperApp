@@ -34,7 +34,7 @@ public class AdminPanel extends BaseActivity {
             return insets;
         });
 
-        errorMessage = findViewById(R.id.errorMessage);
+        errorMessage = findViewById(R.id.nothingToShowMessage);
 
     }
 
@@ -82,7 +82,7 @@ public class AdminPanel extends BaseActivity {
 
     }
 
-    public ArrayList<Event> getMyStandardEvents() {
+    static public ArrayList<Event> getMyStandardEvents() {
 
         ArrayList<Event> events = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
