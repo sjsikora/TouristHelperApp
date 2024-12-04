@@ -2,6 +2,9 @@ package com.example.touristhelperapp;
 
 import android.os.Bundle;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,7 +21,7 @@ public class ItineraryEvent extends Fragment {
     private Event event;
 
     TextView eventTitle;
-    TextView eventDescription;
+    TextView eventTime;
 
     public ItineraryEvent() {}
 
@@ -27,10 +30,10 @@ public class ItineraryEvent extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         eventTitle = view.findViewById(R.id.eventTitle);
-        eventDescription = view.findViewById(R.id.eventDescription);
+        eventTime = view.findViewById(R.id.eventTime);
 
         eventTitle.setText(event.getTitle());
-        eventDescription.setText(event.getDescription());
+        eventTime.setText(DateHelper.startTimeToEndTime(event.getStartTime(), event.getEndTime()));
 
     }
 
@@ -47,4 +50,6 @@ public class ItineraryEvent extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_itinerary_event, container, false);
     }
+
+
 }

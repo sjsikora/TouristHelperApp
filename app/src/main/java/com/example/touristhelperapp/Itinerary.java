@@ -11,9 +11,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -27,6 +24,9 @@ public class Itinerary extends AppCompatActivity {
 
     TextView tripName;
     TextView tripDate;
+    TextView nothingToShowMessage;
+
+    Trip trip = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,16 @@ public class Itinerary extends AppCompatActivity {
             return insets;
         });
 
+        tripName = findViewById(R.id.tripName);
+        tripDate = findViewById(R.id.tripDate);
+        nothingToShowMessage = findViewById(R.id.nothingToShowMessage);
+
+
+        Intent intent = getIntent();
+        trip = intent.getParcelableExtra("trip", Trip.class);
+
         /*
-            Intent intent = getIntent();
-            Trip trip = intent.getParcelableExtra("trip", Trip.class);
-         */
+        // Function used for testing
 
         Calendar cal = Calendar.getInstance();
         cal.set(2025, Calendar.JANUARY, 2, 0, 0);
@@ -56,44 +62,81 @@ public class Itinerary extends AppCompatActivity {
                 time1,
                 time2,
                 AdminPanel.getMyStandardEvents(),
-                new ArrayList<String>(List.of("notability", "uniqueness", "accessibility"))
+                new ArrayList<>(List.of("notability", "uniqueness", "accessibility"))
         );
 
-        tripName = findViewById(R.id.tripName);
-        tripDate = findViewById(R.id.tripDate);
+        */
+
+        // Case we didnt get anything from intent
+        if(trip == null) {
+            tripName.setText(R.string.something_went_wrong_no_trip_is_known_to_this_page);
+            tripDate.setText("");
+            return;
+        }
 
         tripName.setText(trip.getName());
+        tripDate.setText(String.format("%s - %s",
+                DateHelper.formatDateWithSuffix(trip.getStartDate()),
+                DateHelper.formatDateWithSuffix(trip.getEndDate())));
 
+        // Case trip contains no events
+        if(trip.getEvents() == null || trip.getEvents().isEmpty()) {
+            nothingToShowMessage.setText("No events found! Trying adding events on the home page " +
+                    "and come back here to view them");
+            return;
+        }
+
+
+
+
+
+        populateItinerary(trip);
+
+    }
+
+    public void populateItinerary(Trip trip) {
+
+
+
+
+        // Create a new HashMap. Want to group events by days
         Map <String, ArrayList<Event>> eventsByDay = new HashMap<>();
 
         for(Event event : trip.getEvents()) {
-            String eventDay = event.getStartTime().getYear() + "-"
-                    + event.getStartTime().getMonth() + "-"
-                    + event.getStartTime().getDay();
+
+            // Get the day of the event formatDateWithSuffix is an easy way to do this
+            String eventDay = DateHelper.formatDateWithSuffix(event.getStartTime());
 
             if(eventsByDay.containsKey(eventDay)) {
+                // If the day is already in the hash add it to the arraylist present
                 Objects.requireNonNull(eventsByDay.get(eventDay)).add(event);
             } else {
+                // If not, place a new arraylist in the hashmap on that day
                 eventsByDay.put(eventDay, new ArrayList<Event>(List.of(event)));
             }
 
         }
 
-        for (Map.Entry<String, ArrayList<Event>> entry : eventsByDay.entrySet()) {
-            ArrayList<Event> eventsForDay = entry.getValue();
+        // Get a list of all days
+        ArrayList<ArrayList<Event>> listOfEventsByDay = new ArrayList<>(eventsByDay.values());
 
+        // Sort the days so that we have natural ordering
+        Collections.sort(listOfEventsByDay, (a, b) -> {
+            Event eventA = a.get(0);
+            Event eventB = b.get(0);
+            return eventA.getStartTime().compareTo(eventB.getStartTime());
+        });
+
+        // Put all
+        for(int i = 0; i < listOfEventsByDay.size(); i++) {
             Bundle bun = new Bundle();
-            bun.putParcelableArrayList("listOfEvents", eventsForDay);
+            bun.putParcelableArrayList("listOfEvents", listOfEventsByDay.get(i));
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.eventDay, ItineraryDay.class, bun, "tag")
                     .commit();
+
         }
-
-
-
-
     }
-
 }

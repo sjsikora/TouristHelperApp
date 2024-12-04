@@ -19,11 +19,11 @@
         app:layout_constraintTop_toTopOf="@+id/imageView" />
 
     <TextView
-        android:id="@+id/eventDescription"
+        android:id="@+id/eventTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Event Description"
+        android:text="Event Time"
         app:layout_constraintStart_toStartOf="@+id/eventTitle"
         app:layout_constraintTop_toBottomOf="@+id/eventTitle" />
 

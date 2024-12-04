@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import java.text.SimpleDateFormat;
+
 public class ItineraryDay extends Fragment {
 
     static final String ARG_PARAM1 = "listOfEvents";
@@ -32,14 +34,8 @@ public class ItineraryDay extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(eventsList.get(0).getStartTime());
-        String day = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-
         TextView tripDayName = view.findViewById(R.id.tripDayName);
-        tripDayName.setText(String.format("%s %s", day, month));
-
+        tripDayName.setText(DateHelper.formatDateWithSuffix(eventsList.get(0).getStartTime()));
 
         for(Event event : eventsList) {
 
@@ -75,4 +71,6 @@ public class ItineraryDay extends Fragment {
 
         return view;
     }
+
+
 }

@@ -34,7 +34,7 @@ public class AdminPanel extends BaseActivity {
             return insets;
         });
 
-        errorMessage = findViewById(R.id.errorMessage);
+        errorMessage = findViewById(R.id.nothingToShowMessage);
 
     }
 
