@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="366dp"
         android:layout_height="27dp"
         android:text="Your Events:"
