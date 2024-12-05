@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity  {
 
@@ -38,7 +41,7 @@ public class BaseActivity extends AppCompatActivity  {
         tripBundle.putParcelable("trip", trip);
 
         fragmentManagerCreator(id, TripFragment.class, tripBundle);
-        
+
     }
 
     /**
@@ -105,6 +108,37 @@ public class BaseActivity extends AppCompatActivity  {
         tripsRef.push().setValue(object);
     }
 
+    //like pushObject, but for events. Also serializes it as a String/Object map and stores them with a unique key.
+    private void saveEvent(String path, String key, Event event) {
+
+        if (root == null) {
+            initializeFB();
+        }
+
+        DatabaseReference eventRef = root.child(path);
+
+        if (key == null || key.isEmpty()) {
+            //Firebase has a key system we can use to avoid duplicating stuff
+            key = eventRef.push().getKey();
+        }
+
+        if (key != null) {
+            //store as a serialized map instead of just storing the object
+            Map<String, Object> eventMap = serializeEvent(event);
+
+            String finalKey = key;
+            eventRef.child(key).setValue(eventMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    System.out.println("Event saved at path: " + path + "/" + finalKey);
+                } else {
+                    System.err.println("Error - failed to save event: " + task.getException());
+                }
+            });
+        } else {
+            System.err.println("Failed to generate a valid key for event.");
+        }
+    }
+
     /**
      * Read objects from a given path and cast them to a class.
      *
@@ -137,12 +171,73 @@ public class BaseActivity extends AppCompatActivity  {
     }
 
     /**
+     * Add an event to an existing trip in the Firebase database.
+     *
+     * @param tripId The ID of the trip to update.
+     * @param event The event to add to the trip.
+     * @param callback A callback to handle success or failure.
+     */
+    /**
+     * Add an event to a specific trip in Firebase.
+     *
+     * @param tripId The ID of the trip to update.
+     * @param event The event to add to the trip.
+     * @param callback A callback to handle success or failure.
+     */
+
+    /**
      * This function will create a new trip in the DB.
      *
      * @param trip The trip to be added
      */
     protected void createTrip(Trip trip) {
         pushObject("trips", trip);
+    }
+
+    /**
+     * Add an event to a trip identified by its name in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     */
+    protected void addEventToTrip(String tripName, Event event) {
+        if (root == null) {
+            initializeFB();
+        }
+        DatabaseReference tripRef = (DatabaseReference) root.child("trips").orderByChild("name").equalTo(tripName);
+
+        tripRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot tripSnapshot : snapshot.getChildren()) {
+                        Trip trip = tripSnapshot.getValue(Trip.class);
+                        if (trip != null) {
+                            if (trip.getEvents() == null) {
+                                trip.setEvents(new ArrayList<>());
+                            }
+                            trip.addEvent(event);
+
+                            tripSnapshot.getRef().setValue(trip).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    System.out.println("Event added successfully to trip: " + tripName);
+                                } else {
+                                    System.err.println("Failed to add event to trip: " + tripName);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                } else {
+                    System.err.println("Trip not found: " + tripName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.err.println("Database error: " + error.getMessage());
+            }
+        });
     }
 
     /**
@@ -187,5 +282,18 @@ public class BaseActivity extends AppCompatActivity  {
     protected void getAllBusinessOwnerEvents(Consumer<ArrayList<Event>> callback) {
         getObjectsFromPath("eventsBO", Event.class, callback);
     }
+
+    private Map<String, Object> serializeEvent(Event event) {
+        Map<String, Object> eventMap = new HashMap<>();
+        eventMap.put("title", event.getTitle());
+        eventMap.put("factors", event.getFactors());
+        eventMap.put("startTime", event.getStartTime() != null ? event.getStartTime().getTime() : null);
+        eventMap.put("endTime", event.getEndTime() != null ? event.getEndTime().getTime() : null);
+        eventMap.put("description", event.getDescription());
+        eventMap.put("location", event.getLocation());
+        eventMap.put("imageURL", event.getImageURL());
+        return eventMap;
+    }
+
 
 }

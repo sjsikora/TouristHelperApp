@@ -9,8 +9,8 @@ import android.os.Parcelable;
 public class Trip implements Parcelable, Comparable<Trip> {
 
     private String name;
-    private Date startDate;
-    private Date endDate;
+    private Date startTime;
+    private Date endTime;
     private ArrayList<Event> events;
     private ArrayList<String> factors;
 
@@ -18,8 +18,8 @@ public class Trip implements Parcelable, Comparable<Trip> {
 
     public Trip(String name, Date startDate, Date endDate, ArrayList<Event> events, ArrayList<String> factors) {
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startDate;
+        this.endTime = endDate;
         this.events = events;
         this.factors = factors;
     }
@@ -28,8 +28,8 @@ public class Trip implements Parcelable, Comparable<Trip> {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
-        out.writeSerializable(startDate);
-        out.writeSerializable(endDate);
+        out.writeSerializable(startTime);
+        out.writeSerializable(endTime);
         out.writeTypedList(events);
         out.writeStringList(factors);
     }
@@ -47,8 +47,8 @@ public class Trip implements Parcelable, Comparable<Trip> {
 
     private Trip(Parcel in) {
         name = in.readString();
-        startDate = (Date) in.readSerializable();
-        endDate = (Date) in.readSerializable();
+        startTime = (Date) in.readSerializable();
+        endTime = (Date) in.readSerializable();
         events = in.createTypedArrayList(Event.CREATOR);
         factors = in.createStringArrayList();
     }
@@ -65,20 +65,20 @@ public class Trip implements Parcelable, Comparable<Trip> {
         this.name = name;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartTime(Date startDate) {
+        this.startTime = startDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndTime(Date endDate) {
+        this.endTime = endDate;
     }
 
     public ArrayList<Event> getEvents() {
@@ -97,12 +97,16 @@ public class Trip implements Parcelable, Comparable<Trip> {
         this.factors = factors;
     }
 
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
     @Override
     public String toString() {
         return "Trip{" +
                 "name='" + name + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", startDate=" + startTime +
+                ", endDate=" + endTime +
                 ", events=" + events +
                 ", factors=" + factors +
                 '}';
@@ -110,9 +114,9 @@ public class Trip implements Parcelable, Comparable<Trip> {
 
     @Override
     public int compareTo(Trip other) {
-        if(this.startDate.after(other.startDate)) {
+        if(this.startTime.after(other.startTime)) {
             return 1;
-        } else if(this.startDate.before(other.startDate)) {
+        } else if(this.startTime.before(other.startTime)) {
             return -1;
         } else {
             return 0;

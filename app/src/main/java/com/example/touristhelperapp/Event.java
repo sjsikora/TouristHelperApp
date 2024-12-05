@@ -147,4 +147,10 @@ public class Event implements Parcelable, Comparable<Event> {
         }
     }
 
+
+    //returns true if the event is within the timeframe of the event
+    public boolean isValid(Trip trip, Event event) {
+        return (event.getStartTime().getTime() >= trip.getStartTime().getTime() && event.getEndTime().getTime() <= event.getEndTime().getTime());
+    }
+
 }
