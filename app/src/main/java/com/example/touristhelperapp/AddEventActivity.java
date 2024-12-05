@@ -2,14 +2,13 @@ package com.example.touristhelperapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,10 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class AddEventActivity extends BaseActivity {
 
@@ -44,9 +41,12 @@ public class AddEventActivity extends BaseActivity {
     ImageView photoView;
 
     boolean doneLoading = false;
+
     Bitmap image = null;
 
     private Event event;
+
+    ArrayList<Trip> trips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,26 +101,23 @@ public class AddEventActivity extends BaseActivity {
 
         timeText.setText(concat.toString());
 
-
-
     }
 
     private void populateTripDropdown(ArrayList<Trip> trips) {
+
         ArrayAdapter<Trip> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                trips
+                new ArrayList<>(trips)
         );
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        runOnUiThread(() -> {
-            tripDropdown.setAdapter(adapter);
-        });
+        tripDropdown.setAdapter(adapter);
 
         tripDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 updateUIToLoadingState();
 
                 Trip selectedTrip = (Trip) adapterView.getItemAtPosition(i);
@@ -131,6 +128,7 @@ public class AddEventActivity extends BaseActivity {
                         updateUIToAddToTrip();
                     }
                 });
+
             }
 
             @Override
@@ -138,8 +136,6 @@ public class AddEventActivity extends BaseActivity {
 
             }
         });
-
-        doneLoading = true;
     }
 
     private String naturalizeFactors(String fact) {
@@ -182,8 +178,9 @@ public class AddEventActivity extends BaseActivity {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
             removeFromTrip(selectedTrip.getName(), event, (statusCode) -> {
                 switchOnStatus(statusCode, true);
-                updateUIToAddToTrip();
+                finish();
             });
+
         });
     }
 
@@ -197,8 +194,9 @@ public class AddEventActivity extends BaseActivity {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
             addEventToTrip(selectedTrip.getName(), event, statusCode -> {
                 switchOnStatus(statusCode, false);
-                updateUIToRemoveFromTrip();
+                finish();
             });
+
         });
     }
 
