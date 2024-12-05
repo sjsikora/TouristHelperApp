@@ -2,8 +2,11 @@ package com.example.touristhelperapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
@@ -14,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,13 +26,21 @@ import java.util.Locale;
 
 public class AddEventActivity extends BaseActivity {
 
-    private TextView eventTitleTextView;
-    private TextView factorsTextView;
-    private TextView eventDescriptionTextView;
-    private TextView startTimeTextView;
-    private TextView endTimeTextView;
-    private TextView eventLocationTextView;
-    private Spinner tripDropdown;
+
+    TextView title;
+    TextView factors;
+    TextView description;
+    TextView location;
+    TextView textNearCal;
+    TextView timeText;
+
+    Spinner tripDropdown;
+
+    ImageView calendarButton;
+    ImageView photoView;
+
+    boolean doneLoading = false;
+    Bitmap image = null;
 
     private Event event;
 
@@ -45,36 +58,53 @@ public class AddEventActivity extends BaseActivity {
 
         Intent intent = getIntent();
         event = intent.getParcelableExtra("event", Event.class);
+        image = intent.getParcelableExtra("image", Bitmap.class);
 
-        eventTitleTextView = findViewById(R.id.eventTitle);
-        factorsTextView = findViewById(R.id.Factors);
-        startTimeTextView = findViewById(R.id.startTime);
-        endTimeTextView = findViewById(R.id.endTime);
-        eventDescriptionTextView = findViewById(R.id.eventDescription);
-        eventLocationTextView = findViewById(R.id.eventLocation);
+        title = findViewById(R.id.eventTitle);
+        factors = findViewById(R.id.eventFactors);
+        description = findViewById(R.id.eventDescription);
+        location = findViewById(R.id.eventLocation);
         tripDropdown = findViewById(R.id.tripDropdown);
-        Button addToTripButton = findViewById(R.id.addToTripButton);
+        calendarButton = findViewById(R.id.calendarButton);
+        textNearCal = findViewById(R.id.textNearCalendar);
+        photoView = findViewById(R.id.photoView);
+        timeText = findViewById(R.id.timeText);
 
         displayEventInformation();
 
-        runOnUiThread(() -> {
-            getTrips(this::populateTripDropdown);
-        });
+        loadMainImage();
 
-        addToTripButton.setOnClickListener(view -> {
-            Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
-            addToTrip(selectedTrip);
-        });
+        getTrips(this::populateTripDropdown);
+
     }
 
     @SuppressLint("SetTextI18n")
     private void displayEventInformation() {
-        eventTitleTextView.setText(event.getTitle());
-        factorsTextView.setText("Factors: " + String.join(", ", event.getFactors()));
-        eventDescriptionTextView.setText(event.getDescription());
-        startTimeTextView.setText("Start Time: " + formatDate(event.getStartTime()));
-        endTimeTextView.setText("End Time: " + formatDate(event.getEndTime()));
-        eventLocationTextView.setText("Location: " + event.getLocation());
+
+        title.setText(event.getTitle());
+        factors.setText(String.join(", ", event.getFactors()));
+        description.setText(event.getDescription());
+        location.setText(event.getLocation());
+        textNearCal.setText("Add to trip");
+
+        StringBuilder concat = new StringBuilder();
+        Date start = event.getStartTime();
+        Date end = event.getEndTime();
+
+        concat.append(DateHelper.formatDateWithSuffix(start));
+        concat.append(" ");
+        concat.append(DateHelper.startTimeToEndTime(start, end));
+
+        timeText.setText(concat.toString());
+
+        calendarButton.setOnClickListener(v -> {
+            if (doneLoading) {
+                addToTrip(tripDropdown.getSelectedItem() != null ? (Trip) tripDropdown.getSelectedItem() : null);
+            } else {
+                Toast.makeText(this, "Please wait for full load before adding",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -85,7 +115,13 @@ public class AddEventActivity extends BaseActivity {
                 trips
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tripDropdown.setAdapter(adapter);
+
+        runOnUiThread(() -> {
+            tripDropdown.setAdapter(adapter);
+        });
+
+
+        doneLoading = true;
     }
 
     private void addToTrip(Trip selectedTrip) {
@@ -101,8 +137,35 @@ public class AddEventActivity extends BaseActivity {
     }
 
 
-    private String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy h:mm a", Locale.getDefault());
-        return sdf.format(date);
+    private String naturalizeFactors(String fact) {
+
+
+
+
+        return fact;
+    }
+
+    private void loadMainImage() {
+        if(image == null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(event.getImageURL());
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                        // Once we get here, link back into the main thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                photoView.setImageBitmap(image);
+                            }
+                        });
+                    } catch (IOException ignored) {}
+                }
+            }).start();
+        } else {
+            photoView.setImageBitmap(image);
+        }
     }
 }
