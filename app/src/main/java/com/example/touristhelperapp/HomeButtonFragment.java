@@ -9,24 +9,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeButtonFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeButtonFragment extends Fragment {
 
     public HomeButtonFragment() {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-
+        ImageView home = view.findViewById(R.id.homeButtonImageView);
+        home.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), Home.class);
+            startActivity(intent);
+        });
     }
 
     public static HomeButtonFragment newInstance(String param1, String param2) {
