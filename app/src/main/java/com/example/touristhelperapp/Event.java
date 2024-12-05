@@ -1,10 +1,15 @@
 package com.example.touristhelperapp;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 
-public class Event {
+public class Event implements Parcelable, Comparable<Event> {
     private String title;
-    private String[] factors;
+    private ArrayList<String> factors;
     private Date startTime;
     private Date endTime;
     private String description;
@@ -14,7 +19,8 @@ public class Event {
     // Needed for FB
     public Event() {}
 
-    public Event(String title, String[] factors, Date startTime, Date endTime, String description, String location, String imageURL) {
+    public Event(String title, ArrayList<String> factors, Date startTime, Date endTime,
+                 String description, String location, String imageURL) {
         this.title = title;
         this.factors = factors;
         this.startTime = startTime;
@@ -24,6 +30,43 @@ public class Event {
         this.imageURL = imageURL;
     }
 
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(title);
+        out.writeStringList(factors);
+        out.writeSerializable(startTime);
+        out.writeSerializable(endTime);
+        out.writeString(description);
+        out.writeString(location);
+        out.writeString(imageURL);
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR
+            = new Parcelable.Creator<Event>() {
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+
+    private Event(Parcel in) {
+        title = in.readString();
+        factors = in.createStringArrayList();
+        startTime = (Date) in.readSerializable();
+        endTime = (Date) in.readSerializable();
+        description = in.readString();
+        location = in.readString();
+        imageURL = in.readString();
+    }
+
+
     public String getTitle() {
         return title;
     }
@@ -32,11 +75,11 @@ public class Event {
         this.title = title;
     }
 
-    public String[] getFactors() {
+    public ArrayList<String> getFactors() {
         return factors;
     }
 
-    public void setFactors(String[] factors) {
+    public void setFactors(ArrayList<String> factors) {
         this.factors = factors;
     }
 
@@ -79,6 +122,31 @@ public class Event {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "title='" + title + '\'' +
+                ", factors=" + factors +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Event event) {
+        if(this.startTime.after(event.startTime)) {
+            return 1;
+        } else if(this.startTime.before(event.startTime)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
 
     //returns true if the event is within the timeframe of the event
     public boolean isValid(Trip trip, Event event) {
