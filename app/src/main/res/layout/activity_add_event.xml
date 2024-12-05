@@ -11,6 +11,15 @@
         android:padding="16dp">
 
         <!-- Display Event Information -->
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/tripsHomeButton"
+            android:name="com.example.touristhelperapp.HomeButtonFragment"
+            android:layout_width="42dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="26dp" />
+
         <TextView
             android:id="@+id/eventTitle"
             android:layout_width="match_parent"

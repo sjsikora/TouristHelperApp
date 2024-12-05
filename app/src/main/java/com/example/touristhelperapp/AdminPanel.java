@@ -1,9 +1,13 @@
 package com.example.touristhelperapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +26,6 @@ import java.util.Calendar;
 public class AdminPanel extends BaseActivity {
 
     TextView errorMessage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,6 @@ public class AdminPanel extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         errorMessage = findViewById(R.id.nothingToShowMessage);
 
     }
@@ -42,7 +44,10 @@ public class AdminPanel extends BaseActivity {
      * OnClick event that will send users to the business side of the App
      */
     public void goToBusiness(View view) {
-        // TODO: ComputerWhiz24 Please fill in
+        // Create an Intent to navigate to the BusinessPageActivity
+        Intent intent = new Intent(AdminPanel.this, OwnerEvent.class);
+        // Start the activity
+        startActivity(intent);
     }
 
 
