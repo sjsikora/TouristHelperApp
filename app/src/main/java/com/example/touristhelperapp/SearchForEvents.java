@@ -57,13 +57,12 @@ public class SearchForEvents extends BaseActivity {
             return insets;
         });
     }
-    public void onClickSubmit(View view){
+    public void onClickSubmit(View view) {
         ArrayList<String> factors = new ArrayList<>(); // list of factors selected by user
         Bundle bundle = new Bundle();
 
-
         date = findViewById(R.id.searchDate);
-         String searchDate = date.getText().toString(); // get the date entered by user
+        String searchDate = date.getText().toString(); // get the date entered by user
 
         startTime = findViewById(R.id.startTimeEditText);
         String searchStartTime = startTime.getText().toString(); // get the start time entered by user
@@ -71,8 +70,13 @@ public class SearchForEvents extends BaseActivity {
         endTime = findViewById(R.id.endTimeEditText);
         String searchEndTime = endTime.getText().toString(); // get the end time entered by user
 
+        // Validate inputs
+        boolean isValid = true;
 
-        if(!searchDate.isEmpty() && !searchStartTime.isEmpty() && !searchEndTime.isEmpty()){
+        if (searchDate.isEmpty() || searchStartTime.isEmpty() || searchEndTime.isEmpty()) {
+            Toast.makeText(this, "Please fill out all date and time fields.", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else {
             try {
                 Date dateObj = new SimpleDateFormat("MM/dd/yyyy").parse(searchDate);
                 bundle.putSerializable("date", dateObj);
@@ -82,26 +86,35 @@ public class SearchForEvents extends BaseActivity {
 
                 Date endTimeObj = new SimpleDateFormat("HH:mm").parse(searchEndTime);
                 bundle.putSerializable("endTime", endTimeObj);
+
+                // Ensure start time is before end time
+                if (startTimeObj.after(endTimeObj)) {
+                    Toast.makeText(this, "Start time must be before end time.", Toast.LENGTH_SHORT).show();
+                    isValid = false;
+                }
             } catch (Exception e) {
-                Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(this, "Invalid date or time format. Please try again.", Toast.LENGTH_SHORT).show();
+                isValid = false;
             }
-
-            notability = findViewById(R.id.checkbox_notability);
-            uniqueness = findViewById(R.id.checkbox_uniqueness);
-            price = findViewById(R.id.checkbox_price);
-            accessibility = findViewById(R.id.checkbox_accessibility);
-            aweFactor = findViewById(R.id.checkbox_awe_factor);
-
-            factors.add(notability.getText().toString());
-            factors.add(uniqueness.getText().toString());
-            factors.add(price.getText().toString());
-            factors.add(accessibility.getText().toString());
-            factors.add(aweFactor.getText().toString());
-        } else {
-            Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
-            toast.show();
         }
+
+        // If validation fails, stop execution
+        if (!isValid) {
+            return;
+        }
+
+        // Retrieve selected checkboxes
+        notability = findViewById(R.id.checkbox_notability);
+        uniqueness = findViewById(R.id.checkbox_uniqueness);
+        price = findViewById(R.id.checkbox_price);
+        accessibility = findViewById(R.id.checkbox_accessibility);
+        aweFactor = findViewById(R.id.checkbox_awe_factor);
+
+        if (notability.isChecked()) factors.add(notability.getText().toString());
+        if (uniqueness.isChecked()) factors.add(uniqueness.getText().toString());
+        if (price.isChecked()) factors.add(price.getText().toString());
+        if (accessibility.isChecked()) factors.add(accessibility.getText().toString());
+        if (aweFactor.isChecked()) factors.add(aweFactor.getText().toString());
 
         Intent intent = new Intent(this, SearchEventResults.class);
         bundle.putString("tripName", tripSpinner.getSelectedItem().toString());
