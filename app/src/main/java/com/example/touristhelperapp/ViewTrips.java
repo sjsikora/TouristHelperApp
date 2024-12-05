@@ -7,12 +7,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +29,8 @@ public class ViewTrips extends BaseActivity {
 
             for (Trip trip : allTrips) {
 
+                Bundle bun = new Bundle();
+                bun.putParcelable("trip", trip);
                 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                 String startDate = formatter.format(trip.getStartTime());
                 String endDate = formatter.format(trip.getEndTime());
@@ -45,7 +41,7 @@ public class ViewTrips extends BaseActivity {
                 tripBundle.putString("endDate", endDate);
 
                 fragmentManager.beginTransaction()
-                        .add(R.id.viewTrips, TripFragment.class, tripBundle, "tag")
+                        .add(R.id.viewTrips, TripFragment.class, bun, "tag")
                         .commit();
 
             }

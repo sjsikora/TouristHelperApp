@@ -103,13 +103,7 @@ public class Trip implements Parcelable, Comparable<Trip> {
 
     @Override
     public String toString() {
-        return "Trip{" +
-                "name='" + name + '\'' +
-                ", startDate=" + startTime +
-                ", endDate=" + endTime +
-                ", events=" + events +
-                ", factors=" + factors +
-                '}';
+        return getName();
     }
 
     @Override

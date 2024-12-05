@@ -15,6 +15,12 @@
         android:theme="@style/Theme.TouristHelperApp"
         tools:targetApi="31">
         <activity
+            android:name=".SearchEventResults"
+            android:exported="false" />
+        <activity
+            android:name=".AddEventActivity"
+            android:exported="false" />
+        <activity
             android:name=".Itinerary"
             android:exported="false" />
         <activity

@@ -9,6 +9,11 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,23 +34,32 @@ public class AddEventActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_event);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         Intent intent = getIntent();
-        event = (Event) intent.getSerializableExtra("event");
+        event = intent.getParcelableExtra("event", Event.class);
 
         eventTitleTextView = findViewById(R.id.eventTitle);
         factorsTextView = findViewById(R.id.Factors);
-        eventDescriptionTextView = findViewById(R.id.eventDescription);
         startTimeTextView = findViewById(R.id.startTime);
         endTimeTextView = findViewById(R.id.endTime);
+        eventDescriptionTextView = findViewById(R.id.eventDescription);
         eventLocationTextView = findViewById(R.id.eventLocation);
         tripDropdown = findViewById(R.id.tripDropdown);
         Button addToTripButton = findViewById(R.id.addToTripButton);
 
         displayEventInformation();
 
-        getTrips(trips -> runOnUiThread(() -> populateTripDropdown(trips)));
+        runOnUiThread(() -> {
+            getTrips(this::populateTripDropdown);
+        });
 
         addToTripButton.setOnClickListener(view -> {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
@@ -62,10 +76,6 @@ public class AddEventActivity extends BaseActivity {
         endTimeTextView.setText("End Time: " + formatDate(event.getEndTime()));
         eventLocationTextView.setText("Location: " + event.getLocation());
 
-        createEventIconFragment(
-                R.id.eventImage,
-                event
-        );
     }
 
     private void populateTripDropdown(ArrayList<Trip> trips) {
@@ -80,14 +90,16 @@ public class AddEventActivity extends BaseActivity {
 
     private void addToTrip(Trip selectedTrip) {
         if (selectedTrip != null) {
-            selectedTrip.addEvent(event);
-            addEventToTrip(selectedTrip.getName(), event);
-            Toast.makeText(this, "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+            addEventToTrip(selectedTrip.getName(), event, () -> {
+                    Toast.makeText(this, "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+            });
+
             finish();
         } else {
             Toast.makeText(this, "Please select a trip", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy h:mm a", Locale.getDefault());
