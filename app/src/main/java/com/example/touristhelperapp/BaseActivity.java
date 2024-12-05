@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -100,7 +101,7 @@ public class BaseActivity extends AppCompatActivity  {
      *
      * @param path The name of what 'folder' the data should be placed into
      * @param object The object to be placed into the DB. NOTE only Trip and Event have been vetted.
-     */
+I      */
     private void pushObject(String path, Object object) {
         if(root == null) initializeFB();
 
@@ -165,9 +166,17 @@ public class BaseActivity extends AppCompatActivity  {
                     String tripKey = tripSnap.getKey();
                     assert tripKey != null;
 
-                    // Create a map with the field to update and the new value
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("events", new ArrayList<>(List.of(event)));
+                    // Retrieve all other events
+                    DataSnapshot eventsSnapshot = tripSnap.child("events");
+                    GenericTypeIndicator<ArrayList<Event>> t = new GenericTypeIndicator<ArrayList<Event>>() {};
+                    ArrayList<Event> events = eventsSnapshot.getValue(t);
+
+                    // Update
+                    HashMap<String, Object> updates = new HashMap<>();
+                    if(events == null) events = new ArrayList<>();
+                    events.add(event);
+
+                    updates.put("events", events);
 
                     // Update the trip in the database
                     tripRef.child(tripKey).updateChildren(updates)
@@ -190,16 +199,6 @@ public class BaseActivity extends AppCompatActivity  {
 
             }
         });
-    }
-
-    /**
-     * Internal use for addEventToTrip func
-     */
-    private void updateTrip(@NonNull DataSnapshot tripSnap, Event event) {
-
-
-
-
     }
 
     /**
