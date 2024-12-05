@@ -36,8 +36,8 @@ public class ViewTrips extends BaseActivity {
             for (Trip trip : allTrips) {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                String startDate = formatter.format(trip.getStartDate());
-                String endDate = formatter.format(trip.getEndDate());
+                String startDate = formatter.format(trip.getStartTime());
+                String endDate = formatter.format(trip.getEndTime());
 
                 Bundle tripBundle = new Bundle();
                 tripBundle.putString("tripName", trip.getName());

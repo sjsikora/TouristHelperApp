@@ -45,10 +45,7 @@ public class AddEventActivity extends BaseActivity {
 
         displayEventInformation();
 
-        runOnUiThread(() -> {
-            ArrayList<Trip> trips = getTrips();
-            populateTripDropdown(trips);
-        });
+        getTrips(trips -> runOnUiThread(() -> populateTripDropdown(trips)));
 
         addToTripButton.setOnClickListener(view -> {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
@@ -67,8 +64,7 @@ public class AddEventActivity extends BaseActivity {
 
         createEventIconFragment(
                 R.id.eventImage,
-                "https://static.wikia.nocookie.net/jtohs-joke-towers/images/3/33/Fs.de.jpg/revision/latest?cb=20230617010304",
-                "change this"
+                event
         );
     }
 

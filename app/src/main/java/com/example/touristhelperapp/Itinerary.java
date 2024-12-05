@@ -76,8 +76,8 @@ public class Itinerary extends AppCompatActivity {
 
         tripName.setText(trip.getName());
         tripDate.setText(String.format("%s - %s",
-                DateHelper.formatDateWithSuffix(trip.getStartDate()),
-                DateHelper.formatDateWithSuffix(trip.getEndDate())));
+                DateHelper.formatDateWithSuffix(trip.getStartTime()),
+                DateHelper.formatDateWithSuffix(trip.getEndTime())));
 
         // Case trip contains no events
         if(trip.getEvents() == null || trip.getEvents().isEmpty()) {

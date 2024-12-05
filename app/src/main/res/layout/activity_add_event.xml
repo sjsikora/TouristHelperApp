@@ -28,7 +28,7 @@
             android:paddingBottom="8dp" />
 
         <TextView
-            android:id="@+id/eventTime"
+            android:id="@+id/eventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Description"
