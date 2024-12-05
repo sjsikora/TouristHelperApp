@@ -34,7 +34,7 @@
         android:drawablePadding="8dp"
         android:fontFamily="casual"
         android:gravity="center_vertical"
-        android:hint="MM:HH"
+        android:hint="HH:MM"
         android:padding="8dp"
         android:textAlignment="viewStart"
         android:textSize="10sp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/searchDate" />
 
     <CheckBox
-        android:id="@+id/checkbox_notability2"
+        android:id="@+id/checkbox_notability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -64,13 +64,13 @@
         android:fontFamily="casual"
         android:text="Factors:"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/checkbox_notability2"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_notability"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner" />
 
     <CheckBox
-        android:id="@+id/checkbox_accessibility2"
+        android:id="@+id/checkbox_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="111dp"
@@ -80,10 +80,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_price2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_price" />
 
     <CheckBox
-        android:id="@+id/checkbox_uniqueness2"
+        android:id="@+id/checkbox_uniqueness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="111dp"
@@ -93,10 +93,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_notability2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_notability" />
 
     <CheckBox
-        android:id="@+id/checkbox_price2"
+        android:id="@+id/checkbox_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="111dp"
@@ -106,10 +106,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_uniqueness2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_uniqueness" />
 
     <CheckBox
-        android:id="@+id/checkbox_awe_factor2"
+        android:id="@+id/checkbox_awe_factor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="111dp"
@@ -119,7 +119,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_accessibility2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_accessibility" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -177,7 +177,7 @@
         android:inputType="date"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_awe_factor2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_awe_factor" />
 
     <TextView
         android:id="@+id/fromTextView"
@@ -201,7 +201,7 @@
         android:drawablePadding="8dp"
         android:fontFamily="casual"
         android:gravity="center_vertical"
-        android:hint="MM:HH"
+        android:hint="HH:MM"
         android:padding="8dp"
         android:textAlignment="viewStart"
         android:textSize="10sp"

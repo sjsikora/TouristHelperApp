@@ -38,15 +38,18 @@ public class SearchForEvents extends BaseActivity {
         Intent intent = getIntent();
         ArrayList<String> tripNames = new ArrayList<>();
         tripSpinner = findViewById(R.id.selectTripSpinner);
-        getTrips(allTrips -> { // get the names of all trips
-            for (Trip trip : allTrips) {
-                tripNames.add(trip.getName()); // add each trip name to the list
+        getTrips(allTrips -> {
+            if (allTrips == null || allTrips.isEmpty()) {
+                Toast.makeText(this, "No trips available.", Toast.LENGTH_SHORT).show();
+                return;
             }
-            // Dynamically update the spinner with the trip names
+            for (Trip trip : allTrips) {
+                tripNames.add(trip.getName());
+            }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
                     android.R.layout.simple_spinner_item,
-                    tripNames // Use the dynamically fetched trip names
+                    tripNames
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             tripSpinner.setAdapter(adapter); // Set the adapter on the spinner
@@ -79,15 +82,24 @@ public class SearchForEvents extends BaseActivity {
         } else {
             try {
                 Date dateObj = new SimpleDateFormat("MM/dd/yyyy").parse(searchDate);
-                bundle.putSerializable("date", dateObj);
+                if(dateObj != null){
+                    bundle.putSerializable("date", dateObj);
+                }
+
 
                 Date startTimeObj = new SimpleDateFormat("HH:mm").parse(searchStartTime);
-                bundle.putSerializable("startTime", startTimeObj);
+                if(startTimeObj != null) {
+                    bundle.putSerializable("startTime", startTimeObj);
+                }
 
                 Date endTimeObj = new SimpleDateFormat("HH:mm").parse(searchEndTime);
-                bundle.putSerializable("endTime", endTimeObj);
+                if(endTimeObj != null) {
+                    bundle.putSerializable("endTime", endTimeObj);
+
+                }
 
                 // Ensure start time is before end time
+                assert startTimeObj != null;
                 if (startTimeObj.after(endTimeObj)) {
                     Toast.makeText(this, "Start time must be before end time.", Toast.LENGTH_SHORT).show();
                     isValid = false;
