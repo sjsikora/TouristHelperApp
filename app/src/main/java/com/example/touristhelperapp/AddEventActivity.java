@@ -90,14 +90,16 @@ public class AddEventActivity extends BaseActivity {
 
     private void addToTrip(Trip selectedTrip) {
         if (selectedTrip != null) {
-            selectedTrip.addEvent(event);
-            addEventToTrip(selectedTrip.getName(), event);
-            Toast.makeText(this, "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+            addEventToTrip(selectedTrip.getName(), event, () -> {
+                    Toast.makeText(this, "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+            });
+
             finish();
         } else {
             Toast.makeText(this, "Please select a trip", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy h:mm a", Locale.getDefault());
