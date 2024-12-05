@@ -38,18 +38,15 @@ public class SearchForEvents extends BaseActivity {
         Intent intent = getIntent();
         ArrayList<String> tripNames = new ArrayList<>();
         tripSpinner = findViewById(R.id.selectTripSpinner);
-        getTrips(allTrips -> {
-            if (allTrips == null || allTrips.isEmpty()) {
-                Toast.makeText(this, "No trips available.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        getTrips(allTrips -> { // get the names of all trips
             for (Trip trip : allTrips) {
-                tripNames.add(trip.getName());
+                tripNames.add(trip.getName()); // add each trip name to the list
             }
+            // Dynamically update the spinner with the trip names
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
                     android.R.layout.simple_spinner_item,
-                    tripNames
+                    tripNames // Use the dynamically fetched trip names
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             tripSpinner.setAdapter(adapter); // Set the adapter on the spinner
@@ -60,9 +57,10 @@ public class SearchForEvents extends BaseActivity {
             return insets;
         });
     }
-    public void onClickSubmit(View view) {
+    public void onClickSubmit(View view){
         ArrayList<String> factors = new ArrayList<>(); // list of factors selected by user
         Bundle bundle = new Bundle();
+
 
         date = findViewById(R.id.searchDate);
         String searchDate = date.getText().toString(); // get the date entered by user
@@ -73,60 +71,37 @@ public class SearchForEvents extends BaseActivity {
         endTime = findViewById(R.id.endTimeEditText);
         String searchEndTime = endTime.getText().toString(); // get the end time entered by user
 
-        // Validate inputs
-        boolean isValid = true;
 
-        if (searchDate.isEmpty() || searchStartTime.isEmpty() || searchEndTime.isEmpty()) {
-            Toast.makeText(this, "Please fill out all date and time fields.", Toast.LENGTH_SHORT).show();
-            isValid = false;
-        } else {
+        if(!searchDate.isEmpty() && !searchStartTime.isEmpty() && !searchEndTime.isEmpty()){
             try {
                 Date dateObj = new SimpleDateFormat("MM/dd/yyyy").parse(searchDate);
-                if(dateObj != null){
-                    bundle.putSerializable("date", dateObj);
-                }
-
+                bundle.putSerializable("date", dateObj);
 
                 Date startTimeObj = new SimpleDateFormat("HH:mm").parse(searchStartTime);
-                if(startTimeObj != null) {
-                    bundle.putSerializable("startTime", startTimeObj);
-                }
+                bundle.putSerializable("startTime", startTimeObj);
 
                 Date endTimeObj = new SimpleDateFormat("HH:mm").parse(searchEndTime);
-                if(endTimeObj != null) {
-                    bundle.putSerializable("endTime", endTimeObj);
-
-                }
-
-                // Ensure start time is before end time
-                assert startTimeObj != null;
-                if (startTimeObj.after(endTimeObj)) {
-                    Toast.makeText(this, "Start time must be before end time.", Toast.LENGTH_SHORT).show();
-                    isValid = false;
-                }
+                bundle.putSerializable("endTime", endTimeObj);
             } catch (Exception e) {
-                Toast.makeText(this, "Invalid date or time format. Please try again.", Toast.LENGTH_SHORT).show();
-                isValid = false;
+                Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
+                toast.show();
             }
+
+            notability = findViewById(R.id.checkbox_notability);
+            uniqueness = findViewById(R.id.checkbox_uniqueness);
+            price = findViewById(R.id.checkbox_price);
+            accessibility = findViewById(R.id.checkbox_accessibility);
+            aweFactor = findViewById(R.id.checkbox_awe_factor);
+
+            factors.add(notability.getText().toString());
+            factors.add(uniqueness.getText().toString());
+            factors.add(price.getText().toString());
+            factors.add(accessibility.getText().toString());
+            factors.add(aweFactor.getText().toString());
+        } else {
+            Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
+            toast.show();
         }
-
-        // If validation fails, stop execution
-        if (!isValid) {
-            return;
-        }
-
-        // Retrieve selected checkboxes
-        notability = findViewById(R.id.checkbox_notability);
-        uniqueness = findViewById(R.id.checkbox_uniqueness);
-        price = findViewById(R.id.checkbox_price);
-        accessibility = findViewById(R.id.checkbox_accessibility);
-        aweFactor = findViewById(R.id.checkbox_awe_factor);
-
-        if (notability.isChecked()) factors.add(notability.getText().toString());
-        if (uniqueness.isChecked()) factors.add(uniqueness.getText().toString());
-        if (price.isChecked()) factors.add(price.getText().toString());
-        if (accessibility.isChecked()) factors.add(accessibility.getText().toString());
-        if (aweFactor.isChecked()) factors.add(aweFactor.getText().toString());
 
         Intent intent = new Intent(this, SearchEventResults.class);
         bundle.putString("tripName", tripSpinner.getSelectedItem().toString());
