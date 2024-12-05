@@ -127,10 +127,11 @@ public class AddEventActivity extends BaseActivity {
     private void addToTrip(Trip selectedTrip) {
         if (selectedTrip != null) {
             addEventToTrip(selectedTrip.getName(), event, () -> {
-                    Toast.makeText(this, "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
+
             });
 
-            finish();
         } else {
             Toast.makeText(this, "Please select a trip", Toast.LENGTH_SHORT).show();
         }
