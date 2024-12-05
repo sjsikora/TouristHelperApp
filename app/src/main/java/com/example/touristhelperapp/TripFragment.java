@@ -37,6 +37,16 @@ public class TripFragment extends Fragment {
                 DateHelper.formatDateWithSuffix(trip.getEndTime()))
         );
 
+        View.OnClickListener goToIternary = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onNameClick();
+            }
+        };
+
+        calenderNameTextView.setOnClickListener(goToIternary);
+        tripNameTextView.setOnClickListener(goToIternary);
+
     }
 
     @Override
@@ -52,12 +62,11 @@ public class TripFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_trip, container, false);
     }
 
-    public void onNameClick(View view) {
-
-        Bundle bun = new Bundle();
-        bun.putParcelable(ARG_TRIP, trip);
-
+    public void onNameClick() {
         Intent intent = new Intent(getActivity(), Itinerary.class);
+
+        intent.putExtra("trip", trip);
+
         startActivity(intent);
 
     }

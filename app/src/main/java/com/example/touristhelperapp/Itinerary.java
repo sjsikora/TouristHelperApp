@@ -2,6 +2,7 @@ package com.example.touristhelperapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -81,23 +82,15 @@ public class Itinerary extends AppCompatActivity {
 
         // Case trip contains no events
         if(trip.getEvents() == null || trip.getEvents().isEmpty()) {
-            nothingToShowMessage.setText("No events found! Trying adding events on the home page " +
-                    "and come back here to view them");
+            nothingToShowMessage.setText(R.string.no_events_found);
             return;
         }
-
-
-
-
 
         populateItinerary(trip);
 
     }
 
     public void populateItinerary(Trip trip) {
-
-
-
 
         // Create a new HashMap. Want to group events by days
         Map <String, ArrayList<Event>> eventsByDay = new HashMap<>();
@@ -138,5 +131,10 @@ public class Itinerary extends AppCompatActivity {
                     .commit();
 
         }
+    }
+
+    public void onClickAddMore(View view) {
+        Intent intent = new Intent(this, SearchForEvents.class);
+        startActivity(intent);
     }
 }
