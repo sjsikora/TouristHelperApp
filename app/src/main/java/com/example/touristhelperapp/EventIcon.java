@@ -1,5 +1,6 @@
 package com.example.touristhelperapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -32,6 +33,16 @@ public class EventIcon extends Fragment {
 
         ImageView eventIcon = view.findViewById(R.id.eventImage);
         TextView eventText = view.findViewById(R.id.subtitle);
+
+        eventIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                intent.putExtra("event", event);
+
+                startActivity(intent);
+            }
+        });
 
         eventText.setText(event.getTitle()); // Set text directly
         DateHelper.formatDateWithSuffix(event.getStartTime());

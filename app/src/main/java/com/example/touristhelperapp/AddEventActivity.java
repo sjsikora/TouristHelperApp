@@ -9,6 +9,11 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,15 +34,23 @@ public class AddEventActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_event);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         Intent intent = getIntent();
-        event = (Event) intent.getSerializableExtra("event");
+        event = intent.getParcelableExtra("event", Event.class);
 
         eventTitleTextView = findViewById(R.id.eventTitle);
         factorsTextView = findViewById(R.id.Factors);
         startTimeTextView = findViewById(R.id.startTime);
         endTimeTextView = findViewById(R.id.endTime);
+        eventDescriptionTextView = findViewById(R.id.eventDescription);
         eventLocationTextView = findViewById(R.id.eventLocation);
         tripDropdown = findViewById(R.id.tripDropdown);
         Button addToTripButton = findViewById(R.id.addToTripButton);
