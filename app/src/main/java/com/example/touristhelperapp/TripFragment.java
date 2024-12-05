@@ -33,8 +33,8 @@ public class TripFragment extends Fragment {
 
         tripNameTextView.setText(trip.getName());
         calenderNameTextView.setText(String.format("%s - %s",
-                DateHelper.formatDateWithSuffix(trip.getStartDate()),
-                DateHelper.formatDateWithSuffix(trip.getEndDate()))
+                DateHelper.formatDateWithSuffix(trip.getStartTime()),
+                DateHelper.formatDateWithSuffix(trip.getEndTime()))
         );
 
     }

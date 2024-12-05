@@ -36,7 +36,6 @@ public class AddEventActivity extends BaseActivity {
 
         eventTitleTextView = findViewById(R.id.eventTitle);
         factorsTextView = findViewById(R.id.Factors);
-        eventDescriptionTextView = findViewById(R.id.eventDescription);
         startTimeTextView = findViewById(R.id.startTime);
         endTimeTextView = findViewById(R.id.endTime);
         eventLocationTextView = findViewById(R.id.eventLocation);
@@ -46,8 +45,7 @@ public class AddEventActivity extends BaseActivity {
         displayEventInformation();
 
         runOnUiThread(() -> {
-            ArrayList<Trip> trips = getTrips();
-            populateTripDropdown(trips);
+            getTrips(this::populateTripDropdown);
         });
 
         addToTripButton.setOnClickListener(view -> {
@@ -65,11 +63,6 @@ public class AddEventActivity extends BaseActivity {
         endTimeTextView.setText("End Time: " + formatDate(event.getEndTime()));
         eventLocationTextView.setText("Location: " + event.getLocation());
 
-        createEventIconFragment(
-                R.id.eventImage,
-                "https://static.wikia.nocookie.net/jtohs-joke-towers/images/3/33/Fs.de.jpg/revision/latest?cb=20230617010304",
-                "change this"
-        );
     }
 
     private void populateTripDropdown(ArrayList<Trip> trips) {
