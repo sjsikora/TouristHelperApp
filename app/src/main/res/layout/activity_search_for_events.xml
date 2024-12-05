@@ -7,16 +7,52 @@
     android:layout_height="match_parent"
     tools:context=".SearchForEvents">
 
+    <Button
+        android:id="@+id/searchForEventBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="145dp"
+        android:layout_marginEnd="145dp"
+        android:layout_marginBottom="69dp"
+        android:backgroundTint="#4036BF"
+        android:fontFamily="casual"
+        android:onClick="onClickSubmit"
+        android:text="Search"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/endTimeEditText"
+        android:layout_width="106dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/baseline_access_time_24"
+        android:drawablePadding="8dp"
+        android:fontFamily="casual"
+        android:gravity="center_vertical"
+        android:hint="MM:HH"
+        android:padding="8dp"
+        android:textAlignment="viewStart"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/toTextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
+
     <CheckBox
         android:id="@+id/checkbox_notability2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="204dp"
         android:fontFamily="casual"
         android:text="Notability"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner"
-        tools:layout_editor_absoluteX="111dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner" />
 
     <TextView
         android:id="@+id/factorsTextView2"
@@ -104,6 +140,8 @@
     <Spinner
         android:id="@+id/selectTripSpinner"
         android:layout_width="250dp"
+        android:fontFamily="casual"
+        android:textStyle="bold"
         android:layout_height="50dp"
         android:layout_marginStart="41dp"
         android:layout_marginTop="36dp"
@@ -117,26 +155,79 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginTop="240dp"
         android:fontFamily="casual"
         android:text="Date:"
         android:textAlignment="textStart"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/searchDate"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/factorsTextView2" />
 
-    <TextView
-        android:id="@+id/editTextTwo"
+    <EditText
+        android:id="@+id/searchDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="376dp"
-        android:layout_marginEnd="212dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
         android:fontFamily="casual"
         android:hint="MM/DD/YYYY"
         android:inputType="date"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dateTextView"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_awe_factor2" />
+
+    <TextView
+        android:id="@+id/fromTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="casual"
+        android:text="From:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+    <EditText
+        android:id="@+id/startTimeEditText"
+        android:layout_width="106dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/baseline_access_time_24"
+        android:drawablePadding="8dp"
+        android:fontFamily="casual"
+        android:gravity="center_vertical"
+        android:hint="MM:HH"
+        android:padding="8dp"
+        android:textAlignment="viewStart"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/fromTextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
+
+    <TextView
+        android:id="@+id/toTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="casual"
+        android:text="To:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/startTimeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/homeBtnFragment"
+        android:name="com.example.touristhelperapp.HomeButtonFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
