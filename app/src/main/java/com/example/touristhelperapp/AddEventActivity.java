@@ -2,9 +2,13 @@ package com.example.touristhelperapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -97,14 +101,7 @@ public class AddEventActivity extends BaseActivity {
 
         timeText.setText(concat.toString());
 
-        calendarButton.setOnClickListener(v -> {
-            if (doneLoading) {
-                addToTrip(tripDropdown.getSelectedItem() != null ? (Trip) tripDropdown.getSelectedItem() : null);
-            } else {
-                Toast.makeText(this, "Please wait for full load before adding",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
     }
 
@@ -120,28 +117,32 @@ public class AddEventActivity extends BaseActivity {
             tripDropdown.setAdapter(adapter);
         });
 
+        tripDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                updateUIToLoadingState();
+
+                Trip selectedTrip = (Trip) adapterView.getItemAtPosition(i);
+                isEventInTrip(selectedTrip.getName(), event.getTitle(), (inTrip) -> {
+                    if (inTrip) {
+                        updateUIToRemoveFromTrip();
+                    } else {
+                        updateUIToAddToTrip();
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         doneLoading = true;
     }
 
-    private void addToTrip(Trip selectedTrip) {
-        if (selectedTrip != null) {
-            addEventToTrip(selectedTrip.getName(), event, () -> {
-                    Toast.makeText(this,
-                            "Event added to " + selectedTrip.getName(), Toast.LENGTH_SHORT).show();
-
-            });
-
-        } else {
-            Toast.makeText(this, "Please select a trip", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
     private String naturalizeFactors(String fact) {
-
-
-
 
         return fact;
     }
@@ -167,6 +168,68 @@ public class AddEventActivity extends BaseActivity {
             }).start();
         } else {
             photoView.setImageBitmap(image);
+        }
+    }
+
+    private void updateUIToRemoveFromTrip() {
+        Drawable calendarRemove = getResources().getDrawable(R.drawable.calendar_remove);
+        calendarButton.setImageDrawable(calendarRemove);
+        textNearCal.setText("Remove from trip");
+        calendarButton.setEnabled(true);
+
+        calendarButton.setOnClickListener(v -> {
+
+            Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
+            removeFromTrip(selectedTrip.getName(), event, (statusCode) -> {
+                switchOnStatus(statusCode, true);
+                updateUIToAddToTrip();
+            });
+        });
+    }
+
+    private void updateUIToAddToTrip() {
+        Drawable calendarRemove = getResources().getDrawable(R.drawable.calendar_check);
+        calendarButton.setImageDrawable(calendarRemove);
+        textNearCal.setText("Add to trip");
+        calendarButton.setEnabled(true);
+
+        calendarButton.setOnClickListener(v -> {
+            Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
+            addEventToTrip(selectedTrip.getName(), event, statusCode -> {
+                switchOnStatus(statusCode, false);
+                updateUIToRemoveFromTrip();
+            });
+        });
+    }
+
+    private void updateUIToLoadingState() {
+        calendarButton.setEnabled(false);
+        textNearCal.setText("Add to trip");
+    }
+
+    private void switchOnStatus(int code, boolean removing) {
+
+        switch (code) {
+            case 409:
+                Toast.makeText(this, "This trip does not exists", Toast.LENGTH_SHORT).show();
+                break;
+            case 410:
+                if(removing) {
+                    Toast.makeText(this, "This event is not in this trip", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "This event is already in this trip", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 200:
+                if(removing) {
+                    Toast.makeText(this, "Event removed from trip", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Event added to trip", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }
