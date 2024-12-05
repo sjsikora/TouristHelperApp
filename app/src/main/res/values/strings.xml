@@ -9,5 +9,7 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="something_went_wrong_no_trip_is_known_to_this_page">Something went wrong. No trip is known to this page</string>
+    <string name="no_events_found">No events found! Trying adding events on the home page and come back here to view them</string>
 
 </resources>

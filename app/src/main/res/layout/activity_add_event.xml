@@ -1,5 +1,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,6 +21,14 @@
             android:paddingBottom="8dp" />
 
         <TextView
+            android:id="@+id/Factors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Factors"
+            android:textSize="16sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
             android:id="@+id/eventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,10 +37,18 @@
             android:paddingBottom="8dp" />
 
         <TextView
-            android:id="@+id/eventDateTime"
+            android:id="@+id/startTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date and Time"
+            android:text="Start Time"
+            android:textSize="16sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/endTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="End Time"
             android:textSize="16sp"
             android:paddingBottom="8dp" />
 
@@ -57,6 +74,12 @@
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown" />
 
+        <!-- Event Image -->
+        <ImageView
+            android:id="@+id/eventImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <!-- Button to Add Event -->
         <Button
             android:id="@+id/addToTripButton"
@@ -65,5 +88,6 @@
             android:text="Add to Trip"
             android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </ScrollView>

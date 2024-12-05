@@ -6,17 +6,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity  {
 
-    DatabaseReference root;
+    protected DatabaseReference root;
 
     /*
         Here is a way to share functions between activities.
@@ -27,53 +34,64 @@ public class BaseActivity extends AppCompatActivity  {
      * This function will create a Trip Fragment.
      *
      * @param id The ID of the fragment container R.id.<name>
-     * @param tripName The name of the trip
-     * @param startDate The start date of the trip
-     * @param endDate The end date of the trip
+     * @param trip The trip to be placed in the fragment
+     *
      */
-    protected void createTripFragment(int id, String tripName, String startDate, String endDate) {
+    protected void createTripFragment(int id, Trip trip) {
         // This is a bundle, it works just like how intent does, but for
         // fragments. We put in key value pairs that will be read by our fragment.
         Bundle tripBundle = new Bundle();
-        tripBundle.putString("tripName", tripName);
-        tripBundle.putString("startDate", startDate);
-        tripBundle.putString("endDate", endDate);
+        tripBundle.putParcelable("trip", trip);
 
-        // The FragmentManager is responsible for managing fragments.
-        // This is how we create our fragment with our bundle.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(id, TripFragment.class, tripBundle, "tag")
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+        fragmentManagerCreator(id, TripFragment.class, tripBundle);
+
     }
 
     /**
      * This function will create an Event Icon Fragment for a given id.
      *
      * @param id The ID of the fragment container R.id.<name>
-     * @param photoLink The link to the icon of the event
-     * @param eventName The name of the event
+     * @param event The event to be placed in the fragment
      */
-    protected void createEventIconFragment(int id, String photoLink, String eventName) {
+    protected void createEventIconFragment(int id, Event event) {
         Bundle eventBundle = new Bundle();
-        eventBundle.putString("photoLink", photoLink);
-        eventBundle.putString("eventName", eventName);
+        eventBundle.putParcelable("event", event);
+
+        fragmentManagerCreator(id, EventIcon.class, eventBundle);
+    }
+
+    /**
+     * This function will call the FragmentManager to create a new fragment
+     * for specified id and class with associated bundle
+     *
+     * @param id The ID of the fragment container
+     * @param fragmentClass The class that you want to create a fragment out of
+     * @param bun The bundle of arugments that will be sent to the fragment.
+     */
+
+    protected void fragmentManagerCreator(
+            int id,
+            @NonNull Class<? extends androidx. fragment. app. Fragment> fragmentClass,
+            Bundle bun
+    ) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(fragmentManager.isStateSaved()) return;
+
         fragmentManager.beginTransaction()
-                .replace(id, EventIcon.class, eventBundle, "tag")
+                .replace(id, fragmentClass, bun, "tag")
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
+
     }
 
     /**
      * This function will initialize a reference to the Firebase object.
      * Run this function before any FB operations.
      */
-    protected void initializeFB() {
+    void initializeFB() {
         root = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -90,7 +108,7 @@ public class BaseActivity extends AppCompatActivity  {
         DatabaseReference tripsRef = root.child(path);
 
         // Push object into the DB
-        tripsRef.push().setValue((Trip)object);
+        tripsRef.push().setValue(object);
     }
 
     /**
@@ -98,10 +116,13 @@ public class BaseActivity extends AppCompatActivity  {
      *
      * @param path The path to read from
      * @param classType The class to cast to
+     * @param callback The callback function
      */
-    protected <T> ArrayList<T> getObjectsFromPath(String path, Class<T> classType) {
+    private <T> void getObjectsFromPath(String path, Class<T> classType,
+                                                  Consumer<ArrayList<T>> callback) {
         if(root == null) initializeFB();
         DatabaseReference tripsRef = root.child(path);
+
 
         ArrayList<T> list = new ArrayList<>();
         tripsRef.addValueEventListener(new ValueEventListener() {
@@ -110,6 +131,8 @@ public class BaseActivity extends AppCompatActivity  {
                 for (DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {
                     list.add(tripSnapshot.getValue(classType));
                 }
+
+                callback.accept(list);
             }
 
             @Override
@@ -117,8 +140,66 @@ public class BaseActivity extends AppCompatActivity  {
 
             }
         });
+    }
 
-        return list;
+    /**
+     * Add an event to a trip, identified by its name, in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     * @param callback Function to be ran on successful update
+     */
+    protected void addEventToTrip(String tripName, Event event, Runnable callback) {
+        if(root == null) initializeFB();
+
+        DatabaseReference tripRef = root.child("trips");
+
+        Query query = tripRef.orderByChild("name").equalTo((tripName));
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot tripSnap : snapshot.getChildren()) {
+
+                    // Get the key of the trip
+                    String tripKey = tripSnap.getKey();
+                    assert tripKey != null;
+
+                    // Create a map with the field to update and the new value
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("events", new ArrayList<>(List.of(event)));
+
+                    // Update the trip in the database
+                    tripRef.child(tripKey).updateChildren(updates)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    callback.run();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    /**
+     * Internal use for addEventToTrip func
+     */
+    private void updateTrip(@NonNull DataSnapshot tripSnap, Event event) {
+
+
+
+
     }
 
     /**
@@ -132,10 +213,14 @@ public class BaseActivity extends AppCompatActivity  {
 
     /**
      * Return all trips from the DB.
+     *
+     * @param callback When read is read, call this function
      */
-    protected ArrayList<Trip> getTrips() {
-        return getObjectsFromPath("trips", Trip.class);
+    protected void getTrips(Consumer<ArrayList<Trip>> callback) {
+        getObjectsFromPath("trips", Trip.class, callback);
     }
+
+
 
     /**
      * Create a new event in DB.
@@ -149,8 +234,8 @@ public class BaseActivity extends AppCompatActivity  {
      * Return all events from the DB.
      *
      */
-    protected ArrayList<Event> getEvents() {
-        return getObjectsFromPath("events", Event.class);
+    protected void getEvents(Consumer<ArrayList<Event>> callback) {
+        getObjectsFromPath("events", Event.class, callback);
     }
 
     /**
@@ -164,9 +249,13 @@ public class BaseActivity extends AppCompatActivity  {
 
     /**
      * Get all business owner events.
+     *
+     * @param callback When read is read, call this function.
      */
-    protected ArrayList<Event> getAllBusinessOwnerEvents() {
-        return getObjectsFromPath("eventsBO", Event.class);
+    protected void getAllBusinessOwnerEvents(Consumer<ArrayList<Event>> callback) {
+        getObjectsFromPath("eventsBO", Event.class, callback);
     }
+
+
 
 }

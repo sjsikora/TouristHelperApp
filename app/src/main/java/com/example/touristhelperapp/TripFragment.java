@@ -1,5 +1,6 @@
 package com.example.touristhelperapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,13 +14,9 @@ import android.widget.TextView;
 
 public class TripFragment extends Fragment {
 
-    private static final String ARG_TRIPNAME = "tripName";
-    private static final String ARG_STARTDATE = "startDate";
-    private static final String ARG_ENDDATE = "endDate";
+    private static final String ARG_TRIP = "trip";
 
-    private String tripName;
-    private String startDate;
-    private String endDate;
+    private Trip trip;
 
     TextView tripNameTextView;
     TextView calenderNameTextView;
@@ -32,8 +29,23 @@ public class TripFragment extends Fragment {
         tripNameTextView = view.findViewById(R.id.tripName);
         calenderNameTextView = view.findViewById(R.id.dateName);
 
-        tripNameTextView.setText(tripName);
-        calenderNameTextView.setText(String.format("%s - %s", startDate, endDate));
+        if(trip == null) return;
+
+        tripNameTextView.setText(trip.getName());
+        calenderNameTextView.setText(String.format("%s - %s",
+                DateHelper.formatDateWithSuffix(trip.getStartTime()),
+                DateHelper.formatDateWithSuffix(trip.getEndTime()))
+        );
+
+        View.OnClickListener goToIternary = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onNameClick();
+            }
+        };
+
+        calenderNameTextView.setOnClickListener(goToIternary);
+        tripNameTextView.setOnClickListener(goToIternary);
 
     }
 
@@ -41,15 +53,21 @@ public class TripFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            tripName = getArguments().getString(ARG_TRIPNAME);
-            startDate = getArguments().getString(ARG_STARTDATE);
-            endDate = getArguments().getString(ARG_ENDDATE);
+            trip = getArguments().getParcelable(ARG_TRIP, Trip.class);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_trip, container, false);
+    }
+
+    public void onNameClick() {
+        Intent intent = new Intent(getActivity(), Itinerary.class);
+
+        intent.putExtra("trip", trip);
+
+        startActivity(intent);
+
     }
 }

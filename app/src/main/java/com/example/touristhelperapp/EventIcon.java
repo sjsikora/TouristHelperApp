@@ -1,5 +1,6 @@
 package com.example.touristhelperapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,24 +17,15 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventIcon#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EventIcon extends Fragment {
 
-    private static final String ARG_PHOTOLINK = "photoLink";
-    private static final String ARG_EVENTNAME = "eventName";
+    private static final String ARG_EVENT = "event";
 
-    private String photoLink;
-    private String eventName;
+    private Event event;
 
     public EventIcon() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -42,16 +34,25 @@ public class EventIcon extends Fragment {
         ImageView eventIcon = view.findViewById(R.id.eventImage);
         TextView eventText = view.findViewById(R.id.subtitle);
 
-        eventText.setText(eventName); // Set text directly
+        eventIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                intent.putExtra("event", event);
 
+                startActivity(intent);
+            }
+        });
+
+        eventText.setText(event.getTitle()); // Set text directly
+        DateHelper.formatDateWithSuffix(event.getStartTime());
 
         // We wrap downloading the image in a thread to avoid blocking the UI.
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(photoLink);
+                    URL url = new URL(event.getImageURL());
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
                     // Once we get here, link back into the main thread
@@ -66,30 +67,11 @@ public class EventIcon extends Fragment {
         }).start();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EventIcon.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EventIcon newInstance(String param1, String param2) {
-        EventIcon fragment = new EventIcon();
-        Bundle args = new Bundle();
-        args.putString(ARG_PHOTOLINK, param1);
-        args.putString(ARG_EVENTNAME, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            photoLink = getArguments().getString(ARG_PHOTOLINK);
-            eventName = getArguments().getString(ARG_EVENTNAME);
+            event = getArguments().getParcelable(ARG_EVENT, Event.class);
         }
     }
 

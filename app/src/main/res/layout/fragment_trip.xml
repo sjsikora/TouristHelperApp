@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@android:drawable/ic_menu_today"
-        android:text="TextView"
+        android:fontFamily="casual"
+        android:text="Loading.."
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +22,10 @@
         android:id="@+id/dateName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:fontFamily="casual"
+        android:text="Loading..."
         android:textColor="#666666"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tripName"
         app:layout_constraintTop_toBottomOf="@+id/tripName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
