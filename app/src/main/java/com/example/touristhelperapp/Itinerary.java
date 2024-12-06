@@ -68,7 +68,7 @@ public class Itinerary extends AppCompatActivity {
 
         */
 
-        // Case we didnt get anything from intent
+        // Case we didn't get anything from intent
         if(trip == null) {
             tripName.setText(R.string.something_went_wrong_no_trip_is_known_to_this_page);
             tripDate.setText("");
