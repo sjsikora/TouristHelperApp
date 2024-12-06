@@ -78,41 +78,11 @@ public class SearchForEvents extends BaseActivity {
         date = findViewById(R.id.searchDate);
         String searchDate = date.getText().toString(); // get the date entered by user
 
-        startTime = findViewById(R.id.startTimeEditText);
-        String searchStartTime = startTime.getText().toString(); // get the start time entered by user
 
-        endTime = findViewById(R.id.endTimeEditText);
-        String searchEndTime = endTime.getText().toString(); // get the end time entered by user
-
-
-        if(!searchDate.isEmpty() && !searchStartTime.isEmpty() && !searchEndTime.isEmpty()){
+        if(!searchDate.isEmpty()){
             try {
                 Date dateObj = new SimpleDateFormat("MM/dd/yyyy").parse(searchDate);
                 intent.putExtra("date", dateObj);
-
-                Date startTimeObj = new SimpleDateFormat("HH:mm", Locale.US).parse(searchStartTime);
-                Date endTimeObj = new SimpleDateFormat("HH:mm", Locale.US).parse(searchEndTime);
-
-                assert dateObj != null;
-                LocalDate datePart = dateObj.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-
-                LocalTime startTimePart = startTimeObj.toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                        .toLocalTime();
-
-                LocalTime endTimePart = endTimeObj.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalTime();
-
-                LocalDateTime combinedStartDateTime = LocalDateTime.of(datePart, startTimePart);
-                LocalDateTime combinedEndDateTime = LocalDateTime.of(datePart,endTimePart);
-                startTimeObj = Date.from(combinedStartDateTime.atZone(ZoneId.systemDefault()).toInstant());
-                endTimeObj = Date.from(combinedEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
-                intent.putExtra("startTime", startTimeObj);
-                intent.putExtra("endTime", endTimeObj);
 
             } catch (Exception e) {
                 Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);

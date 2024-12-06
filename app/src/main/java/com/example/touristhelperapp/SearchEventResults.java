@@ -33,8 +33,7 @@ public class SearchEventResults extends BaseActivity {
 
         Trip trip = intent.getParcelableExtra("trip", Trip.class);
         ArrayList<String> factors = intent.getStringArrayListExtra("factorArrayList");
-        Date queryStart = intent.getSerializableExtra("startTime", Date.class);
-        Date queryEnd = intent.getSerializableExtra("endTime", Date.class);
+        Date queryDate = intent.getSerializableExtra("date", Date.class);
 
 
         if(trip == null) {
@@ -49,7 +48,7 @@ public class SearchEventResults extends BaseActivity {
             while (iterator.hasNext()) {
                 Event event = iterator.next();
 
-                if (!DateHelper.isDateWithinRange(event.getStartTime(), queryStart, queryEnd)) {
+                if (!DateHelper.isDateWithinRange(event.getStartTime(), queryDate, queryDate)) {
                     iterator.remove();
                     continue;
                 }
