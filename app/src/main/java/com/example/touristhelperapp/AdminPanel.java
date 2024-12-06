@@ -44,13 +44,116 @@ public class AdminPanel extends BaseActivity {
      * OnClick event that will send users to the business side of the App
      */
     public void goToBusiness(View view) {
-        // Create an Intent to navigate to the BusinessPageActivity
         Intent intent = new Intent(AdminPanel.this, OwnerEvent.class);
-        // Start the activity
         startActivity(intent);
     }
+    public ArrayList<Event> addBusinessEvents() {
 
+        ArrayList<Event> events = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
 
+        cal.set(2025, Calendar.JANUARY, 3, 10, 30);
+        Date time1 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 3, 11, 59);
+        Date time2 = cal.getTime();
+
+        events.add(new Event(
+                "Starry Night Stargazing",
+                new ArrayList<String>(List.of("price", "accessibility")),
+                time1,
+                time2,
+                "Join us for an unforgettable evening under the stars! Led by experienced astronomers, we'll guide you through constellations, planets, and other celestial objects visible that night.",
+                "Okanagan Observatory, Beaverdell, BC V0H 1A0",
+                "https://science.nasa.gov/wp-content/uploads/2024/02/hubble-ngc2298-acs-wfc3-v3-5fcont-final.jpg?w=1891"
+        ));
+
+        cal.set(2025, Calendar.JANUARY, 3, 15, 0);
+        Date time3 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 3, 20, 30);
+        Date time4 = cal.getTime();
+
+        events.add(new Event(
+                "Pasta Making Class",
+                new ArrayList<String>(List.of("accessibility")),
+                time3,
+                time4,
+                "Learn how to make Pasta from local Kelowna chefs! ",
+                "510 Bernard Ave #100, Kelowna, BC V1Y 6P1",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrtN4zmU3zFWphWnmErJvFd5Sv0eF2s-e-GA&s"
+        ));
+
+        cal.set(2025, Calendar.JANUARY, 6, 9, 30);
+        Date time5 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 6, 12, 0);
+        Date time6 = cal.getTime();
+
+        events.add(new Event(
+                "Stuart Park Ice Skating",
+                new ArrayList<String>(List.of("price", "notability")),
+                time5,
+                time6,
+                "Come ice skating in Kelowna's public park rink! Skate rentals are also available.",
+                "1430 Water St, Kelowna, BC V1Y 1J1",
+                "https://www.kelowna.ca/sites/files/1/styles/inside_banner/public/uploads/banners/inside/parks/stuart_park_rink.jpg?itok=DfylgVyX"
+        ));
+
+        cal.set(2025, Calendar.JANUARY, 4, 14, 30);
+        Date time7 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 4, 15, 0);
+        Date time8 = cal.getTime();
+
+        events.add(new Event(
+                "Wine Tasting",
+                new ArrayList<String>(List.of("notability", "uniqueness", "accessibility")),
+                time7,
+                time8,
+                "Come to Mission Hill for the 3rd annual Winter wine tasting. There will be performances from local bands as well as a Christmas Play.",
+                "Mission Hill Family Estate Winery, 1730 Mission Hill Rd, West Kelowna, BC V4T 2E4",
+                "https://www.missionhillwinery.com/wp-content/uploads/2020/09/MHFE_Disc_Winery_Architecture_Loggia01-780x575.jpg"
+        ));
+
+        cal.set(2025, Calendar.JANUARY, 2, 9, 0);
+        Date time9 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 2, 13, 0);
+        Date time10 = cal.getTime();
+
+        events.add(new Event(
+                "Snowshoeing Adventure",
+                new ArrayList<String>(List.of("accessibility")),
+                time9,
+                time10,
+                "Join a guided snowshoeing trek through the pristine trails of Myra Canyon. Suitable for all fitness levels.",
+                "Myra Canyon, Kelowna, BC V1W 4G5",
+                "https://imagedelivery.net/rCY_-t_NaBnc_UkEr8yoCA/a6822616-848a-49b3-a582-f16d51c47d00/instory"
+        ));
+
+        cal.set(2025, Calendar.JANUARY, 5, 9, 30);
+        Date time11 = cal.getTime();
+        cal.set(2025, Calendar.JANUARY, 5, 13, 0);
+        Date time12 = cal.getTime();
+
+        events.add(new Event(
+                "Winter Farmers' Market",
+                new ArrayList<String>(List.of("accessibility")),
+                time11,
+                time12,
+                "Browse local produce, handmade crafts, and delicious baked goods at the Winter Farmers' Market.",
+                "Kelowna Community Centre, 1375 Water St, Kelowna, BC V1Y 1J4",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUYSW7RD9NGTV3E-wgrCwXPG4UNg5c-fyvXQ&s"
+        ));
+
+        uploadMyBusinessData();
+        return events;
+    }
+
+    public void uploadMyBusinessData() {
+        ArrayList<Event> events = getMyStandardEvents();
+        try {
+            for(Event event : events) createEventBusinessOwner(event);
+        } catch (Exception | Error e ) {
+            errorMessage.setText(e.getMessage());
+        }
+    }
     /**
      * Load standard data into the DB.
      */
@@ -65,6 +168,8 @@ public class AdminPanel extends BaseActivity {
 
                     // If all data, was deleted go ahead and upload standard data
                     uploadMyStandardData();
+                    //Also add business events
+                    addBusinessEvents();
                 } else {
                     throw new RuntimeException("Failed to delete all data");
                 }
