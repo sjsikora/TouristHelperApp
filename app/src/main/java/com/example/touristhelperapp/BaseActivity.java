@@ -269,6 +269,44 @@ I      */
     }
 
     /**
+     * Remove an event from the database by its name.
+     *
+     * @param eventName The name of the event to remove
+     * @param callback  The callback to indicate success (200) or failure (404 if not found)
+     */
+    protected void removeEventByName(String eventName, Consumer<Integer> callback) {
+        if (root == null) initializeFB();
+
+        DatabaseReference eventsRef = root.child("eventsBO"); // Assuming events are in 'eventsBO'
+
+        Query query = eventsRef.orderByChild("title").equalTo(eventName);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    // Event not found
+                    callback.accept(404);
+                    return;
+                }
+
+                for (DataSnapshot eventSnapshot : snapshot.getChildren()) {
+                    // Remove the event
+                    eventSnapshot.getRef().removeValue()
+                            .addOnSuccessListener(aVoid -> callback.accept(200))
+                            .addOnFailureListener(e -> callback.accept(404));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+                callback.accept(404);
+            }
+        });
+    }
+
+    /**
      * Add an event to a trip, identified by its name, in the Firebase database.
      *
      * @param tripName The name of the trip to update
