@@ -12,10 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 public class Home extends BaseActivity {
 
@@ -52,56 +50,70 @@ public class Home extends BaseActivity {
                 R.id.eventFrag4
         };
 
-        // Get trips from the DB
-        getTrips(trips -> {
 
-            Calendar c = Calendar.getInstance();
-            Date today = c.getTime();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Get trips from the DB
+                getTrips(trips -> {
 
-            if(trips == null || trips.isEmpty()) return;
+                    Calendar c = Calendar.getInstance();
+                    Date today = c.getTime();
 
-            // Only show trips after today
-            trips.removeIf(trip -> trip.getEndTime().before(today));
+                    if(trips == null || trips.isEmpty()) return;
 
-            // Sort the trips so the next trip is the first one
-            Collections.sort(trips);
+                    // Only show trips after today
+                    trips.removeIf(trip -> trip.getEndTime().before(today));
 
-            // Get that trip and display
-            Trip nextTrip = trips.get(0);
-            createTripFragment(R.id.tripFragment, nextTrip);
+                    // Sort the trips so the next trip is the first one
+                    Collections.sort(trips);
 
-            getEvents(events -> {
-
-                events.removeIf(event -> !DateHelper.isDateWithinRange(event.getStartTime(),
-                        nextTrip.getStartTime(),
-                        nextTrip.getEndTime()));
-
-                int limit = ids.length;
-
-                if(events.size() < ids.length) limit = events.size();
-
-                TextView noEvents = findViewById(R.id.noEventsFound);
-                TextView recommendedEvents = findViewById(R.id.recommendedEvents);
-
-                recommendedEvents.setText("Recommended Events for your " + nextTrip.getName() + " trip:");
-
-                if(limit == 0) {
-                    TextView tnnoEvents = findViewById(R.id.noEventsFound);
-                    noEvents.setText("No events were found for " + nextTrip.getName() + "'s date range");
-                    return;
-                } else {
+                    // Get that trip and display
+                    Trip nextTrip = trips.get(0);
+                    runOnUiThread(() -> {
+                        createTripFragment(R.id.tripFragment, nextTrip);
+                    });
 
 
-                    noEvents.setText("");
-                }
+                    getEvents(events -> {
 
-                for(int i = 0; i < limit; i++) {
-                    Event event = events.get(i);
-                    createEventIconFragment(ids[i], event);
-                }
+                        events.removeIf(event -> !DateHelper.isDateWithinRange(event.getStartTime(),
+                                nextTrip.getStartTime(),
+                                nextTrip.getEndTime()));
 
-            });
-        });
+
+                        runOnUiThread( () -> {
+
+                            int limit = ids.length;
+
+                            if(events.size() < ids.length) limit = events.size();
+
+                            TextView noEvents = findViewById(R.id.noEventsFound);
+                            TextView recommendedEvents = findViewById(R.id.recommendedEvents);
+
+                            recommendedEvents.setText("Recommended Events for your " + nextTrip.getName() + " trip:");
+
+                            if (limit == 0) {
+                                TextView tnnoEvents = findViewById(R.id.noEventsFound);
+                                noEvents.setText("No events were found for " + nextTrip.getName() + "'s date range");
+                                return;
+                            } else {
+
+
+                                noEvents.setText("");
+                            }
+
+                            for (int i = 0; i < limit; i++) {
+                                Event event = events.get(i);
+                                createEventIconFragment(ids[i], event, nextTrip.getName());
+                            }
+                        });
+                    });
+                });
+            }
+        }).start();
+
+
     }
 
     /**

@@ -73,6 +73,12 @@ public class CreateTrip extends BaseActivity {
         accessibility = findViewById(R.id.checkbox_accessibility);
         aweFactor = findViewById(R.id.checkbox_awe_factor);
 
+        checkFactor(factors, notability);
+        checkFactor(factors, uniqueness);
+        checkFactor(factors, price);
+        checkFactor(factors, accessibility);
+        checkFactor(factors, aweFactor);
+
         if(validDate){
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
             dateFormat.setLenient(false); // Ensures strict parsing of date
@@ -80,12 +86,6 @@ public class CreateTrip extends BaseActivity {
             try {
                 Date startDate = dateFormat.parse(tripStartDate);
                 Date endDate = dateFormat.parse(tripEndDate);
-
-                factors.add(checkFactor(notability));
-                factors.add(checkFactor(uniqueness));
-                factors.add(checkFactor(price));
-                factors.add(checkFactor(accessibility));
-                factors.add(checkFactor(aweFactor));
 
                 Trip newTrip = new Trip(newTripName, startDate, endDate, events, factors);
                 createTrip(newTrip);
@@ -103,12 +103,8 @@ public class CreateTrip extends BaseActivity {
 
     }
 
-    public String checkFactor(CheckBox c){
-        if(c.isChecked()){
-             return c.getText().toString();
-        }
-        else
-            return "";
+    public void checkFactor(ArrayList<String> factors, CheckBox c) {
+        if(c.isChecked()) factors.add(c.getText().toString().toLowerCase());
     }
 }
 

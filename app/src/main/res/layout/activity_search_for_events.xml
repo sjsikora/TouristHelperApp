@@ -13,113 +13,33 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="145dp"
         android:layout_marginEnd="145dp"
-        android:layout_marginBottom="69dp"
-        android:backgroundTint="#4036BF"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#908FF0"
         android:fontFamily="casual"
         android:onClick="onClickSubmit"
-        android:text="Search"
+        android:text="Advanced search"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/endTimeEditText"
-        android:layout_width="106dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/baseline_access_time_24"
-        android:drawablePadding="8dp"
-        android:fontFamily="casual"
-        android:gravity="center_vertical"
-        android:hint="MM:HH"
-        android:padding="8dp"
-        android:textAlignment="viewStart"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/toTextView"
-        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
-
-    <CheckBox
-        android:id="@+id/checkbox_notability2"
+    <Button
+        android:id="@+id/searchForEventBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="204dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="2dp"
+        android:backgroundTint="#4036BF"
         android:fontFamily="casual"
-        android:text="Notability"
+        android:onClick="searchByTrip"
+        android:text="Search"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/selectTripSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner" />
-
-    <TextView
-        android:id="@+id/factorsTextView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="12dp"
-        android:fontFamily="casual"
-        android:text="Factors:"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/checkbox_notability2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner" />
-
-    <CheckBox
-        android:id="@+id/checkbox_accessibility2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginEnd="188dp"
-        android:fontFamily="casual"
-        android:text="Accessibility"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_price2" />
-
-    <CheckBox
-        android:id="@+id/checkbox_uniqueness2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginEnd="192dp"
-        android:fontFamily="casual"
-        android:text="Uniqueness"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_notability2" />
-
-    <CheckBox
-        android:id="@+id/checkbox_price2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginEnd="236dp"
-        android:fontFamily="casual"
-        android:text="Price"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_uniqueness2" />
-
-    <CheckBox
-        android:id="@+id/checkbox_awe_factor2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginEnd="195dp"
-        android:fontFamily="casual"
-        android:text="Awe Factor"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_accessibility2" />
+        app:layout_constraintStart_toEndOf="@+id/selectTripSpinner"
+        app:layout_constraintTop_toTopOf="@+id/selectTripSpinner" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -137,89 +57,182 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/selectTripSpinner"
-        android:layout_width="250dp"
-        android:fontFamily="casual"
-        android:textStyle="bold"
-        android:layout_height="50dp"
+    <TextView
+        android:id="@+id/titleTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="41dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="120dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="41dp"
+        android:fontFamily="casual"
+        android:text="Search by Trip:"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.005"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
+    <TextView
+        android:id="@+id/titleTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="56dp"
+        android:fontFamily="casual"
+        android:text="Advanced search..."
+        android:textAlignment="center"
+        android:textColor="#6F6F6F"
+        android:textColorLink="#ADACAC"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectTripSpinner" />
+
+    <EditText
+        android:id="@+id/searchDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:fontFamily="casual"
+        android:hint="MM/DD/YYYY"
+        android:inputType="date"
+        android:textColorLink="#6D6868"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_awe_factor2" />
+
+    <TextView
+        android:id="@+id/factorsTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="casual"
+        android:text="Factors:"
+        android:textColorLink="#ADACAC"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_notability2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView4" />
 
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="232dp"
         android:fontFamily="casual"
         android:text="Date:"
         android:textAlignment="textStart"
+        android:textColorLink="#ADACAC"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/searchDate"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/factorsTextView2" />
 
-    <EditText
-        android:id="@+id/searchDate"
+    <CheckBox
+        android:id="@+id/checkbox_notability2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="111dp"
         android:layout_marginTop="29dp"
-        android:layout_marginEnd="24dp"
-        android:ems="10"
         android:fontFamily="casual"
-        android:hint="MM/DD/YYYY"
-        android:inputType="date"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_awe_factor2" />
-
-    <TextView
-        android:id="@+id/fromTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="36dp"
-        android:fontFamily="casual"
-        android:text="From:"
+        android:text="Notability"
+        android:textColor="#ADACAC"
+        android:textColorLink="#ADACAC"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView4" />
 
-    <EditText
-        android:id="@+id/startTimeEditText"
-        android:layout_width="106dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/baseline_access_time_24"
-        android:drawablePadding="8dp"
-        android:fontFamily="casual"
-        android:gravity="center_vertical"
-        android:hint="MM:HH"
-        android:padding="8dp"
-        android:textAlignment="viewStart"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/fromTextView"
-        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
-
-    <TextView
-        android:id="@+id/toTextView"
+    <CheckBox
+        android:id="@+id/checkbox_awe_factor2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="195dp"
         android:fontFamily="casual"
-        android:text="To:"
+        android:text="Awe Factor"
+        android:textColor="#ADACAC"
+        android:textColorLink="#ADACAC"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/startTimeEditText"
-        app:layout_constraintTop_toBottomOf="@+id/searchDate" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_accessibility2" />
+
+    <CheckBox
+        android:id="@+id/checkbox_accessibility2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="188dp"
+        android:fontFamily="casual"
+        android:text="Accessibility"
+        android:textColor="#ADACAC"
+        android:textColorLink="#ADACAC"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_price2" />
+
+    <CheckBox
+        android:id="@+id/checkbox_price2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="236dp"
+        android:fontFamily="casual"
+        android:text="Price"
+        android:textColor="#ADACAC"
+        android:textColorLink="#ADACAC"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_uniqueness2" />
+
+    <CheckBox
+        android:id="@+id/checkbox_uniqueness2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="192dp"
+        android:fontFamily="casual"
+        android:text="Uniqueness"
+        android:textColor="#ADACAC"
+        android:textColorLink="#ADACAC"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_notability2" />
+
+    <Spinner
+        android:id="@+id/selectTripSpinner"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="120dp"
+        android:autofillHints="Select a Trip"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView2" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homeBtnFragment"

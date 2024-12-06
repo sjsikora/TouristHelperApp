@@ -19,8 +19,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class SearchForEvents extends BaseActivity {
     Spinner tripSpinner;
@@ -29,6 +34,7 @@ public class SearchForEvents extends BaseActivity {
     EditText startTime;
     EditText endTime;
     CheckBox notability, uniqueness, price, accessibility, aweFactor;
+    boolean doneLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +42,21 @@ public class SearchForEvents extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_search_for_events);
         Intent intent = getIntent();
-        ArrayList<String> tripNames = new ArrayList<>();
+
+        // Put trip names into the spinner
+
         tripSpinner = findViewById(R.id.selectTripSpinner);
         getTrips(allTrips -> { // get the names of all trips
-            for (Trip trip : allTrips) {
-                tripNames.add(trip.getName()); // add each trip name to the list
-            }
+
             // Dynamically update the spinner with the trip names
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            ArrayAdapter<Trip> adapter = new ArrayAdapter<>(
                     this,
                     android.R.layout.simple_spinner_item,
-                    tripNames // Use the dynamically fetched trip names
+                    allTrips // Use the dynamically fetched trip names
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             tripSpinner.setAdapter(adapter); // Set the adapter on the spinner
+            doneLoading = true;
         });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -57,56 +64,68 @@ public class SearchForEvents extends BaseActivity {
             return insets;
         });
     }
-    public void onClickSubmit(View view){
-        ArrayList<String> factors = new ArrayList<>(); // list of factors selected by user
-        Bundle bundle = new Bundle();
 
+    public void onClickSubmit(View view){
+
+        if(!doneLoading) {
+            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(this, SearchEventResults.class);
+        ArrayList<String> factors = null;
 
         date = findViewById(R.id.searchDate);
-         String searchDate = date.getText().toString(); // get the date entered by user
-
-        startTime = findViewById(R.id.startTimeEditText);
-        String searchStartTime = startTime.getText().toString(); // get the start time entered by user
-
-        endTime = findViewById(R.id.endTimeEditText);
-        String searchEndTime = endTime.getText().toString(); // get the end time entered by user
+        String searchDate = date.getText().toString(); // get the date entered by user
 
 
-        if(!searchDate.isEmpty() && !searchStartTime.isEmpty() && !searchEndTime.isEmpty()){
+        if(!searchDate.isEmpty()){
             try {
                 Date dateObj = new SimpleDateFormat("MM/dd/yyyy").parse(searchDate);
-                bundle.putSerializable("date", dateObj);
+                intent.putExtra("date", dateObj);
 
-                Date startTimeObj = new SimpleDateFormat("HH:mm").parse(searchStartTime);
-                bundle.putSerializable("startTime", startTimeObj);
-
-                Date endTimeObj = new SimpleDateFormat("HH:mm").parse(searchEndTime);
-                bundle.putSerializable("endTime", endTimeObj);
             } catch (Exception e) {
                 Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
                 toast.show();
             }
 
-            notability = findViewById(R.id.checkbox_notability);
-            uniqueness = findViewById(R.id.checkbox_uniqueness);
-            price = findViewById(R.id.checkbox_price);
-            accessibility = findViewById(R.id.checkbox_accessibility);
-            aweFactor = findViewById(R.id.checkbox_awe_factor);
+            factors = new ArrayList<>();
+            notability = findViewById(R.id.checkbox_notability2);
+            uniqueness = findViewById(R.id.checkbox_uniqueness2);
+            price = findViewById(R.id.checkbox_price2);
+            accessibility = findViewById(R.id.checkbox_accessibility2);
+            aweFactor = findViewById(R.id.checkbox_awe_factor2);
 
-            factors.add(notability.getText().toString());
-            factors.add(uniqueness.getText().toString());
-            factors.add(price.getText().toString());
-            factors.add(accessibility.getText().toString());
-            factors.add(aweFactor.getText().toString());
+            if(notability.isChecked()) { factors.add(notability.getText().toString()); }
+            if(uniqueness.isChecked()) { factors.add(uniqueness.getText().toString()); }
+            if (price.isChecked()) { factors.add(price.getText().toString()); }
+            if (accessibility.isChecked()) { factors.add(accessibility.getText().toString()); }
+            if (aweFactor.isChecked()) { factors.add(aweFactor.getText().toString()); }
         } else {
             Toast toast = Toast.makeText(this, "Invalid Date. Try Again.", Toast.LENGTH_SHORT);
             toast.show();
+            return;
+        }
+
+        Trip selectedTrip = (Trip) tripSpinner.getSelectedItem();
+        intent.putExtra("factorArrayList", factors);
+
+        startActivity(intent);
+
+    }
+
+
+    public void searchByTrip(View view) {
+
+        if(!doneLoading) {
+            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         Intent intent = new Intent(this, SearchEventResults.class);
-        bundle.putString("tripName", tripSpinner.getSelectedItem().toString());
-        bundle.putStringArrayList("factorArrayList", factors);
-        intent.putExtras(bundle);
+        Trip selectedTrip = (Trip) tripSpinner.getSelectedItem();
+        intent.putExtra("trip", selectedTrip);
         startActivity(intent);
+
     }
 }
