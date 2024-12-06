@@ -35,31 +35,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.099" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add more"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.405"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView"
-        app:layout_constraintVertical_bias="0.197" />
-
-    <ImageView
+    <Button
         android:id="@+id/plus"
-        android:layout_width="21dp"
-        android:layout_height="28dp"
+        android:layout_width="126dp"
+        android:layout_height="60dp"
         android:onClick="addBusinessEvent"
+        android:text="Add More"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.584"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView"
-        app:layout_constraintVertical_bias="0.185"
-        app:srcCompat="@drawable/plus_removebg_preview" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -80,6 +67,8 @@
 
 
     </ScrollView>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
