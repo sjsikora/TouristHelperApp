@@ -108,10 +108,23 @@ public class SearchForEvents extends BaseActivity {
         }
 
         Trip selectedTrip = (Trip) tripSpinner.getSelectedItem();
-
-        intent.putExtra("trip", selectedTrip);
         intent.putExtra("factorArrayList", factors);
 
+        startActivity(intent);
+
+    }
+
+
+    public void searchByTrip(View view) {
+
+        if(!doneLoading) {
+            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(this, SearchEventResults.class);
+        Trip selectedTrip = (Trip) tripSpinner.getSelectedItem();
+        intent.putExtra("trip", selectedTrip);
         startActivity(intent);
 
     }

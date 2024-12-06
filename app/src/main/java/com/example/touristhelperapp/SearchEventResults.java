@@ -17,6 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SearchEventResults extends BaseActivity {
+
+    Trip trip;
+    Date queryStartDate;
+    Date queryEndDate;
+    ArrayList<String> factors;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +37,19 @@ public class SearchEventResults extends BaseActivity {
 
         Intent intent = getIntent();
 
-        Trip trip = intent.getParcelableExtra("trip", Trip.class);
-        ArrayList<String> factors = intent.getStringArrayListExtra("factorArrayList");
-        Date queryDate = intent.getSerializableExtra("date", Date.class);
+        trip = intent.getParcelableExtra("trip", Trip.class);
 
+        // If trip is null....
+        if(trip == null) {
+            factors = intent.getStringArrayListExtra("factorArrayList");
+            queryStartDate = intent.getSerializableExtra("date", Date.class);
+            queryEndDate = queryStartDate;
+        } else {
+            factors = trip.getFactors();
+            if(factors == null) factors = new ArrayList<>();
+            queryStartDate = trip.getStartTime();
+            queryEndDate = trip.getEndTime();
+        }
 
         if(trip == null) {
             Toast.makeText(this, "No trip selected", Toast.LENGTH_SHORT).show();
@@ -48,7 +63,7 @@ public class SearchEventResults extends BaseActivity {
             while (iterator.hasNext()) {
                 Event event = iterator.next();
 
-                if (!DateHelper.isDateWithinRange(event.getStartTime(), queryDate, queryDate)) {
+                if (!DateHelper.isDateWithinRange(event.getStartTime(), queryStartDate, queryEndDate)) {
                     iterator.remove();
                     continue;
                 }
@@ -79,6 +94,7 @@ public class SearchEventResults extends BaseActivity {
         for(Event event : matchingEvents) {
             Bundle bun = new Bundle();
             bun.putParcelable("event", event);
+            if(trip != null) bun.putString("tripName", trip.getName());
 
             if(fragmentManager.isStateSaved()) return;
 
@@ -87,6 +103,7 @@ public class SearchEventResults extends BaseActivity {
                     .commit();
         }
     }
+
 
 
 }
