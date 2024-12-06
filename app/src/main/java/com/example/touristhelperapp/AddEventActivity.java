@@ -105,6 +105,22 @@ public class AddEventActivity extends BaseActivity {
 
     private void populateTripDropdown(ArrayList<Trip> trips) {
 
+        trips.removeIf(trip -> !DateHelper.isDateWithinRange(event.getStartTime(),
+                trip.getStartTime(),
+                trip.getEndTime()));
+
+        if(trips.isEmpty()) {
+
+            tripDropdown.setVisibility(View.GONE);
+            textNearCal.setText("No trips during this event");
+
+            Toast.makeText(this, "This event doesn't happen on a trip",
+                    Toast.LENGTH_SHORT).show();
+
+
+            return;
+        }
+
         ArrayAdapter<Trip> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
