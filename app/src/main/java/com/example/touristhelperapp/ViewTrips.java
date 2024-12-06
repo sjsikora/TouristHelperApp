@@ -33,6 +33,8 @@ public class ViewTrips extends BaseActivity {
                 Bundle bun = new Bundle();
                 bun.putParcelable("trip", trip);
 
+                if(fragmentManager.isStateSaved()) return;
+
                 fragmentManager.beginTransaction()
                         .add(R.id.viewTrips, TripFragment.class, bun, "tag")
                         .commit();

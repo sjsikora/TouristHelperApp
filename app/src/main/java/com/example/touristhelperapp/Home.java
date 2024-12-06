@@ -92,7 +92,7 @@ public class Home extends BaseActivity {
 
                 for(int i = 0; i < limit; i++) {
                     Event event = events.get(i);
-                    createEventIconFragment(ids[i], event);
+                    createEventIconFragment(ids[i], event, nextTrip.getName());
                 }
 
             });

@@ -94,7 +94,7 @@ public class AdminPanel extends BaseActivity {
 
         events.add(new Event(
                 "Starry Night Stargazing",
-                new ArrayList<String>(List.of("price", "accessibility")),
+                new ArrayList<String>(List.of("price", "accessibility", "awe-factor")),
                 time1,
                 time2,
                 "Join us for an unforgettable evening under the stars! Led by experienced astronomers, we'll guide you through constellations, planets, and other celestial objects visible that night.",

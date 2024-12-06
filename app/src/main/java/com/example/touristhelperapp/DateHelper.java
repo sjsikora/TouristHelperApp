@@ -55,7 +55,11 @@ public class DateHelper {
         Date normalizedStart = normalizeToDay(start);
         Date normalizedEnd = normalizeToDay(end);
 
-        return !normalizedDate.before(normalizedStart) && !normalizedDate.after(normalizedEnd);
+        boolean before = normalizedDate.before(normalizedStart);
+        boolean after = normalizedDate.after(normalizedEnd);
+
+        return !before && !after;
+
     }
 
     private static Date normalizeToDay(Date date) {
