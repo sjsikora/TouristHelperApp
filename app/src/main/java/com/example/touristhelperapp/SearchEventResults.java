@@ -99,7 +99,7 @@ public class SearchEventResults extends BaseActivity {
             if(fragmentManager.isStateSaved()) return;
 
             fragmentManager.beginTransaction()
-                    .add(R.id.eventEntry, EventIcon.class, bun, "tag")
+                    .add(R.id.eventEntry, SearchResultEvent.class, bun, "tag")
                     .commit();
         }
     }
