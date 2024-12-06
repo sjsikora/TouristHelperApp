@@ -84,17 +84,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recommendedEvents" />
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="288dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/back"
-        android:queryHint="Search an Event"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tripFragment" />
-
     <TextView
         android:id="@+id/seeAllMyTrip"
         android:layout_width="wrap_content"
@@ -110,24 +99,20 @@
         app:layout_constraintStart_toEndOf="@+id/welcomeTextView"
         app:layout_constraintTop_toTopOf="@+id/welcomeTextView" />
 
-    <TextView
+    <Button
         android:id="@+id/tripPlanView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="3dp"
+        android:layout_width="197dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="casual"
         android:onClick="searchForEvents"
         android:text="@string/home_Trip_Plan"
-        android:textColor="#3F51B5"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toEndOf="@+id/searchView"
-        app:layout_constraintTop_toTopOf="@+id/searchView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripFragment" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -158,8 +143,8 @@
         android:id="@+id/recommendedEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
         android:fontFamily="casual"
         android:onClick="searchForEvents"
         android:text="Recommended...."
@@ -167,7 +152,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/searchView"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripPlanView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
