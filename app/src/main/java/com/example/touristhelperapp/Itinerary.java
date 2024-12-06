@@ -3,6 +3,7 @@ package com.example.touristhelperapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -21,11 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Itinerary extends AppCompatActivity {
+public class Itinerary extends BaseActivity {
 
     TextView tripName;
     TextView tripDate;
     TextView nothingToShowMessage;
+    ScrollView scrollView;
 
     Trip trip = null;
 
@@ -43,32 +46,15 @@ public class Itinerary extends AppCompatActivity {
         tripName = findViewById(R.id.tripName);
         tripDate = findViewById(R.id.tripDate);
         nothingToShowMessage = findViewById(R.id.nothingToShowMessage);
+        scrollView = findViewById(R.id.scrollView2);
 
+        putUIinLoadingState();
 
         Intent intent = getIntent();
         trip = intent.getParcelableExtra("trip", Trip.class);
 
-        /*
-        // Function used for testing
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(2025, Calendar.JANUARY, 2, 0, 0);
-        Date time1 = cal.getTime();
-
-        cal.set(2025, Calendar.JANUARY, 4, 11, 0);
-        Date time2 = cal.getTime();
-
-        Trip trip = new Trip(
-                "Christmas with Grandma",
-                time1,
-                time2,
-                AdminPanel.getMyStandardEvents(),
-                new ArrayList<>(List.of("notability", "uniqueness", "accessibility"))
-        );
-
-        */
-
-        // Case we didnt get anything from intent
+        // Case we didn't get anything from intent
         if(trip == null) {
             tripName.setText(R.string.something_went_wrong_no_trip_is_known_to_this_page);
             tripDate.setText("");
@@ -80,22 +66,24 @@ public class Itinerary extends AppCompatActivity {
                 DateHelper.formatDateWithSuffix(trip .getStartTime()),
                 DateHelper.formatDateWithSuffix(trip.getEndTime())));
 
+        getAllEventsFromTripName(trip.getName(), (events) -> {
+            trip.setEvents(events);
+            populateItinerary(events);
+        });
+
+    }
+
+    public void populateItinerary(ArrayList<Event> events) {
         // Case trip contains no events
-        if(trip.getEvents() == null || trip.getEvents().isEmpty()) {
+        if(events == null || events.isEmpty()) {
             nothingToShowMessage.setText(R.string.no_events_found);
             return;
         }
 
-        populateItinerary(trip);
-
-    }
-
-    public void populateItinerary(Trip trip) {
-
         // Create a new HashMap. Want to group events by days
         Map <String, ArrayList<Event>> eventsByDay = new HashMap<>();
 
-        for(Event event : trip.getEvents()) {
+        for(Event event : events) {
 
             // Get the day of the event formatDateWithSuffix is an easy way to do this
             String eventDay = DateHelper.formatDateWithSuffix(event.getStartTime());
@@ -131,6 +119,14 @@ public class Itinerary extends AppCompatActivity {
                     .commit();
 
         }
+
+        scrollView.setVisibility(View.VISIBLE);
+        nothingToShowMessage.setText("");
+    }
+
+    public void putUIinLoadingState() {
+        scrollView.setVisibility(View.INVISIBLE);
+        nothingToShowMessage.setText("Loading data....");
     }
 
     public void onClickAddMore(View view) {

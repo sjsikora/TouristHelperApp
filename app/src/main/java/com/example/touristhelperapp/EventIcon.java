@@ -22,6 +22,7 @@ public class EventIcon extends Fragment {
     private static final String ARG_EVENT = "event";
 
     private Event event;
+    private Bitmap image;
 
     public EventIcon() {
         // Required empty public constructor
@@ -40,6 +41,10 @@ public class EventIcon extends Fragment {
                 Intent intent = new Intent(getActivity(), AddEventActivity.class);
                 intent.putExtra("event", event);
 
+                if(image != null && image.getByteCount() < 100000) {
+                    intent.putExtra("image", image);
+                }
+
                 startActivity(intent);
             }
         });
@@ -53,13 +58,13 @@ public class EventIcon extends Fragment {
             public void run() {
                 try {
                     URL url = new URL(event.getImageURL());
-                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
                     // Once we get here, link back into the main thread
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            eventIcon.setImageBitmap(bmp);
+                            eventIcon.setImageBitmap(image);
                         }
                     });
                 } catch (IOException ignored) {}
