@@ -46,6 +46,8 @@ public class AddEventActivity extends BaseActivity {
 
     private Event event;
 
+    String tripName;
+
     ArrayList<Trip> trips;
 
     @Override
@@ -63,6 +65,7 @@ public class AddEventActivity extends BaseActivity {
         Intent intent = getIntent();
         event = intent.getParcelableExtra("event", Event.class);
         image = intent.getParcelableExtra("image", Bitmap.class);
+        tripName = intent.getStringExtra("tripName");
 
         title = findViewById(R.id.eventTitle);
         factors = findViewById(R.id.eventFactors);
@@ -121,11 +124,25 @@ public class AddEventActivity extends BaseActivity {
             return;
         }
 
+        if(!(tripName == null)) {
+            // Reorder trips so that the trip with tripName is first
+            for(int i = 0; i < trips.size(); i++) {
+                if (trips.get(i).getName().equals(tripName)) {
+                    Trip temp = trips.get(0);
+                    trips.set(0, trips.get(i));
+                    trips.set(i, temp);
+                    break;
+                }
+            }
+        }
+
         ArrayAdapter<Trip> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 new ArrayList<>(trips)
         );
+
+
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -194,7 +211,7 @@ public class AddEventActivity extends BaseActivity {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
             removeFromTrip(selectedTrip.getName(), event, (statusCode) -> {
                 switchOnStatus(statusCode, true);
-                finish();
+                updateUIToAddToTrip();
             });
 
         });
@@ -210,8 +227,10 @@ public class AddEventActivity extends BaseActivity {
             Trip selectedTrip = (Trip) tripDropdown.getSelectedItem();
             addEventToTrip(selectedTrip.getName(), event, statusCode -> {
                 switchOnStatus(statusCode, false);
-                finish();
+                updateUIToRemoveFromTrip();
             });
+
+
 
         });
     }

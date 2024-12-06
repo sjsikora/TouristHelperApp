@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.text.SimpleDateFormat;
@@ -24,13 +27,13 @@ public class ViewTrips extends BaseActivity {
         getTrips(allTrips -> {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            int counter = 0; // Or use trip.getId() if available
-
 
             for (Trip trip : allTrips) {
 
                 Bundle bun = new Bundle();
                 bun.putParcelable("trip", trip);
+
+                if(fragmentManager.isStateSaved()) return;
 
                 fragmentManager.beginTransaction()
                         .add(R.id.viewTrips, TripFragment.class, bun, "tag")
@@ -41,29 +44,11 @@ public class ViewTrips extends BaseActivity {
 
         }); // Get all trips
 
-
-
-
-        return;
-
-        /*
-
-
-            String uniqueTag = "tripFragment" + counter++; // Or "tripFragment" + trip.getId()
-
-            fragmentManager.beginTransaction()
-                    .add(R.id.viewTrips, TripFragment.class, null, uniqueTag)
-                    .commit();
-        }
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-*/
-
 
     }
 

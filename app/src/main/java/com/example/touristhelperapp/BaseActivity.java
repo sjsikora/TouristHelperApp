@@ -56,9 +56,10 @@ public class BaseActivity extends AppCompatActivity  {
      * @param id The ID of the fragment container R.id.<name>
      * @param event The event to be placed in the fragment
      */
-    protected void createEventIconFragment(int id, Event event) {
+    protected void createEventIconFragment(int id, Event event, String tripName) {
         Bundle eventBundle = new Bundle();
         eventBundle.putParcelable("event", event);
+        eventBundle.putString("tripName", tripName);
 
         fragmentManagerCreator(id, EventIcon.class, eventBundle);
     }
@@ -128,7 +129,7 @@ I      */
 
 
         ArrayList<T> list = new ArrayList<>();
-        tripsRef.addValueEventListener(new ValueEventListener() {
+        tripsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {

@@ -20,9 +20,11 @@ import java.net.URL;
 public class EventIcon extends Fragment {
 
     private static final String ARG_EVENT = "event";
+    private static final String ARG_TRIPNAME = "tripName";
 
     private Event event;
     private Bitmap image;
+    private String tripName;
 
     public EventIcon() {
         // Required empty public constructor
@@ -40,6 +42,7 @@ public class EventIcon extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AddEventActivity.class);
                 intent.putExtra("event", event);
+                intent.putExtra("tripName", tripName);
 
                 if(image != null && image.getByteCount() < 100000) {
                     intent.putExtra("image", image);
@@ -77,6 +80,7 @@ public class EventIcon extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             event = getArguments().getParcelable(ARG_EVENT, Event.class);
+            tripName = getArguments().getString(ARG_TRIPNAME);
         }
     }
 
