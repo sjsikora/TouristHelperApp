@@ -184,6 +184,11 @@ I      */
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChildren()) {
+                    callback.accept(new ArrayList<>());
+                    return;
+                }
+
                 for(DataSnapshot tripSnap : snapshot.getChildren()) {
 
                     // Get the key of the trip
@@ -196,6 +201,7 @@ I      */
                             = new GenericTypeIndicator<ArrayList<Event>>() {};
 
                     ArrayList<Event> events = eventsSnapshot.getValue(t);
+                    if(events == null) events = new ArrayList<>();
 
                     callback.accept(events);
                 }
