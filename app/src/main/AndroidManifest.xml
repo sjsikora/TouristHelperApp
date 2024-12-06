@@ -36,6 +36,12 @@
             android:name=".CreateTrip"
             android:exported="false" />
         <activity
+            android:name=".OwnerEvent"
+            android:exported="true" />
+        <activity
+            android:name=".AddOwnerEvent"
+            android:exported="true" />
+        <activity
             android:name=".Home"
             android:exported="true">
             <intent-filter>

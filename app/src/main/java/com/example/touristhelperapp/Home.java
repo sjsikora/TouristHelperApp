@@ -3,6 +3,7 @@ package com.example.touristhelperapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +24,10 @@ public class Home extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setIconifiedByDefault(false);  // Expand the SearchView by default
+        searchView.setQuery("", false);  // Trigger hint display
+        searchView.setQueryHint("Event Name");
 
         Intent intent = getIntent();
 
