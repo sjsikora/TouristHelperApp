@@ -3,7 +3,6 @@ package com.example.touristhelperapp;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,10 +12,11 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class OwnerEvent extends BaseActivity {
     ScrollView scrollView;
@@ -31,7 +31,7 @@ public class OwnerEvent extends BaseActivity {
 
         getAllBusinessOwnerEvents(events -> {
             for (Event e : events) {
-                // Create a horizontal LinearLayout for each event
+                // Create a vertical LinearLayout for each event (for title and date)
                 LinearLayout eventLayout = new LinearLayout(this);
                 eventLayout.setOrientation(LinearLayout.HORIZONTAL);
                 eventLayout.setPadding(16, 16, 16, 16);
@@ -42,14 +42,28 @@ public class OwnerEvent extends BaseActivity {
                 imageParams.setMargins(0, 0, 16, 0);
                 imageView.setLayoutParams(imageParams);
 
+                // Create a vertical layout for title and date
+                LinearLayout textLayout = new LinearLayout(this);
+                textLayout.setOrientation(LinearLayout.VERTICAL);
+
                 // Create a TextView for the event title
                 TextView titleView = new TextView(this);
                 titleView.setText(e.getTitle());
                 titleView.setTextSize(18);
 
-                // Add the ImageView and TextView to the event layout
+                // Create a TextView for the event date
+                TextView dateView = new TextView(this);
+                dateView.setTextSize(14);
+                dateView.setPadding(0, 8, 0, 0);
+                dateView.setText(formatEventDate(e.getStartTime(), e.getEndTime()));
+
+                // Add title and date TextViews to the text layout
+                textLayout.addView(titleView);
+                textLayout.addView(dateView);
+
+                // Add the ImageView and text layout to the event layout
                 eventLayout.addView(imageView);
-                eventLayout.addView(titleView);
+                eventLayout.addView(textLayout);
 
                 // Add the event layout to the main layout
                 layout.addView(eventLayout);
@@ -58,8 +72,21 @@ public class OwnerEvent extends BaseActivity {
                 loadImageFromURL(e.getImageURL(), imageView);
             }
         });
-
     }
+
+    private String formatEventDate(Date startTime, Date endTime) {
+        // Define the date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d 'at' h:mm a", Locale.ENGLISH);
+        SimpleDateFormat endTimeFormat = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+
+        // Format start and end times
+        String formattedStartTime = dateFormat.format(startTime);
+        String formattedEndTime = endTimeFormat.format(endTime);
+
+        // Combine into a single string
+        return formattedStartTime + " - " + formattedEndTime;
+    }
+
     private void loadImageFromURL(String urlString, ImageView imageView) {
         new Thread(() -> {
             try {
@@ -75,11 +102,12 @@ public class OwnerEvent extends BaseActivity {
     }
 
     public void addBusinessEvent() {
-        Intent intent = new Intent(OwnerEvent.this, OwnerEvent.class);
+        Intent intent = new Intent(OwnerEvent.this, ViewTrips.class);
         startActivity(intent);
     }
+
     public void editBusinessEvent() {
-        Intent intent = new Intent(OwnerEvent.this, OwnerEvent.class);
+        Intent intent = new Intent(OwnerEvent.this, ViewTrips.class);
         startActivity(intent);
     }
 }
