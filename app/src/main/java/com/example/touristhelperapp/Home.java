@@ -3,14 +3,17 @@ package com.example.touristhelperapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Home extends BaseActivity {
@@ -37,22 +40,6 @@ public class Home extends BaseActivity {
      */
     public void retrieveData() {
 
-        // Get trips from the DB
-        getTrips(trips -> {
-
-            if(trips == null || trips.isEmpty()) return;
-
-
-            // Sort the trips so the next trip is the first one
-            Collections.sort(trips);
-
-            // Get that trip and display
-            Trip nextTrip = trips.get(0);
-            createTripFragment(R.id.tripFragment, nextTrip);
-        });
-
-
-
         int[] ids = {
                 R.id.eventFrag1,
                 R.id.eventFrag2,
@@ -60,17 +47,55 @@ public class Home extends BaseActivity {
                 R.id.eventFrag4
         };
 
-        getEvents(events -> {
+        // Get trips from the DB
+        getTrips(trips -> {
 
-            int limit = ids.length;
+            Calendar c = Calendar.getInstance();
+            Date today = c.getTime();
 
-            if(events.size() < ids.length) limit = events.size();
+            if(trips == null || trips.isEmpty()) return;
 
-            for(int i = 0; i < limit; i++) {
-                Event event = events.get(i);
-                createEventIconFragment(ids[i], event);
-            }
+            // Only show trips after today
+            trips.removeIf(trip -> trip.getEndTime().before(today));
 
+            // Sort the trips so the next trip is the first one
+            Collections.sort(trips);
+
+            // Get that trip and display
+            Trip nextTrip = trips.get(0);
+            createTripFragment(R.id.tripFragment, nextTrip);
+
+            getEvents(events -> {
+
+                events.removeIf(event -> !DateHelper.isDateWithinRange(event.getStartTime(),
+                        nextTrip.getStartTime(),
+                        nextTrip.getEndTime()));
+
+                int limit = ids.length;
+
+                if(events.size() < ids.length) limit = events.size();
+
+                TextView noEvents = findViewById(R.id.noEventsFound);
+                TextView recommendedEvents = findViewById(R.id.recommendedEvents);
+
+                recommendedEvents.setText("Recommended Events for your " + nextTrip.getName() + " trip:");
+
+                if(limit == 0) {
+                    TextView tnnoEvents = findViewById(R.id.noEventsFound);
+                    noEvents.setText("No events were found for " + nextTrip.getName() + "'s date range");
+                    return;
+                } else {
+
+
+                    noEvents.setText("");
+                }
+
+                for(int i = 0; i < limit; i++) {
+                    Event event = events.get(i);
+                    createEventIconFragment(ids[i], event);
+                }
+
+            });
         });
     }
 
@@ -98,6 +123,10 @@ public class Home extends BaseActivity {
     public void searchForEvents(View view){
         Intent intent = new Intent(this, SearchForEvents.class);
         startActivity(intent);
+
+    }
+
+    public void addHalloween(View view) {
 
     }
 
