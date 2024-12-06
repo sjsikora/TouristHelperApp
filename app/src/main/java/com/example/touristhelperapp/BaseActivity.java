@@ -12,14 +12,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class BaseActivity extends AppCompatActivity  {
 
@@ -100,7 +103,7 @@ public class BaseActivity extends AppCompatActivity  {
      *
      * @param path The name of what 'folder' the data should be placed into
      * @param object The object to be placed into the DB. NOTE only Trip and Event have been vetted.
-     */
+I      */
     private void pushObject(String path, Object object) {
         if(root == null) initializeFB();
 
@@ -143,13 +146,35 @@ public class BaseActivity extends AppCompatActivity  {
     }
 
     /**
-     * Add an event to a trip, identified by its name, in the Firebase database.
-     *
-     * @param tripName The name of the trip to update
-     * @param event The event to add to the trip
-     * @param callback Function to be ran on successful update
+     * Check if an event is in a trip.
+     * @param tripName The name of the trip to check
+     * @param eventName The name of the event to check
+     * @param callback The callback function. Will give a boolean.
      */
-    protected void addEventToTrip(String tripName, Event event, Runnable callback) {
+    protected void isEventInTrip(String tripName, String eventName, Consumer<Boolean> callback) {
+        getAllEventsFromTripName(tripName, (events) -> {
+            callback.accept(isEventInArrayList(events, eventName));
+        });
+    }
+
+    private boolean isEventInArrayList(ArrayList<Event> events, String eventName) {
+
+        // Loop through a verify we are adding a duplicate event
+        for(Event e : events) {
+            if(e.getTitle().equals(eventName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get all events from a trip.
+     * @param tripName The name of the trip to get events from
+     * @param callback The callback function. Will give a list of events.
+     */
+    protected void getAllEventsFromTripName(String tripName, Consumer<ArrayList<Event>> callback) {
         if(root == null) initializeFB();
 
         DatabaseReference tripRef = root.child("trips");
@@ -159,29 +184,26 @@ public class BaseActivity extends AppCompatActivity  {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChildren()) {
+                    callback.accept(new ArrayList<>());
+                    return;
+                }
+
                 for(DataSnapshot tripSnap : snapshot.getChildren()) {
 
                     // Get the key of the trip
                     String tripKey = tripSnap.getKey();
                     assert tripKey != null;
 
-                    // Create a map with the field to update and the new value
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("events", new ArrayList<>(List.of(event)));
+                    // Retrieve all other events
+                    DataSnapshot eventsSnapshot = tripSnap.child("events");
+                    GenericTypeIndicator<ArrayList<Event>> t
+                            = new GenericTypeIndicator<ArrayList<Event>>() {};
 
-                    // Update the trip in the database
-                    tripRef.child(tripKey).updateChildren(updates)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    callback.run();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
+                    ArrayList<Event> events = eventsSnapshot.getValue(t);
+                    if(events == null) events = new ArrayList<>();
+
+                    callback.accept(events);
                 }
             }
 
@@ -192,14 +214,135 @@ public class BaseActivity extends AppCompatActivity  {
         });
     }
 
+
     /**
-     * Internal use for addEventToTrip func
+     * Add an event to a trip, identified by its name, in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     * @param callback The callback function. Will give error codes
+     *                 200 - Successfully added event
+     *                 404 - Something Went wrong internally
+     *                 409 - Trip does not exist
+     *                 410 - Event already in trip.
      */
-    private void updateTrip(@NonNull DataSnapshot tripSnap, Event event) {
+    protected void addEventToTrip(String tripName, Event event, Consumer<Integer> callback) {
+        updateEventInTrip(tripName, event, callback, (events, e) -> {
+            if(isEventInArrayList(events, e.getTitle())) {
+                callback.accept(410);
+                return null;
+            } else {
+                events.add(e);
+            }
 
+            return events;
+        });
 
+    }
 
+    /**
+     * Remove an event to a trip, identified by its name, in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     * @param callback The callback function. Will give error codes
+     *                 200 - Successfully added event
+     *                 404 - Something Went wrong internally
+     *                 409 - Trip does not exist
+     *                 410 - Event not in the trip
+     */
+    protected void removeFromTrip(String tripName, Event event, Consumer<Integer> callback) {
 
+        updateEventInTrip(tripName, event, callback, (events, e) -> {
+
+            if(!isEventInArrayList(events, e.getTitle())) {
+                callback.accept(410);
+                return null;
+            } else {
+
+                events.removeIf(ee -> ee.getTitle().equals(e.getTitle()));
+
+                return events;
+            }
+        });
+
+    }
+
+    /**
+     * Add an event to a trip, identified by its name, in the Firebase database.
+     *
+     * @param tripName The name of the trip to update
+     * @param event The event to add to the trip
+     * @param callback The callback function. Will give error codes
+     *                 200 - Successfully added event
+     *                 404 - Something Went wrong internally
+     *                 409 - Trip does not exist
+     *                 410 - Dependent on caller
+     * @param updateFunction A function given a trip arraylist and event gives back an arraylist
+     */
+    protected void updateEventInTrip(String tripName, Event event,
+                                  Consumer<Integer> callback,
+                                  BiFunction<ArrayList<Event>, Event, ArrayList<Event>> updateFunction) {
+        if(root == null) initializeFB();
+
+        DatabaseReference tripRef = root.child("trips");
+        Query query = tripRef.orderByChild("name").equalTo((tripName));
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (!snapshot.hasChildren()) {
+                    callback.accept(409);
+                    return;
+                }
+
+                for(DataSnapshot tripSnap : snapshot.getChildren()) {
+
+                    // Get the key of the trip
+                    String tripKey = tripSnap.getKey();
+                    assert tripKey != null;
+
+                    // Retrieve all other events
+                    DataSnapshot eventsSnapshot = tripSnap.child("events");
+                    GenericTypeIndicator<ArrayList<Event>> t = new GenericTypeIndicator<ArrayList<Event>>() {};
+                    ArrayList<Event> events = eventsSnapshot.getValue(t);
+
+                    if(events == null) events = new ArrayList<>();
+
+                    events = updateFunction.apply(events, event);
+
+                    // If we were given null, that means the callback was run and we should
+                    // do no more processing
+                    if(events == null) return;
+
+                    // Update
+                    HashMap<String, Object> updates = new HashMap<>();
+
+                    updates.put("events", events);
+
+                    // Update the trip in the database
+                    tripRef.child(tripKey).updateChildren(updates)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    callback.accept(200);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    callback.accept(404);
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     /**

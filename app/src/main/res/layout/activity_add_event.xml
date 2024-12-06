@@ -1,93 +1,141 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".AddEventActivity">
 
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/homeFragment"
+        android:name="com.example.touristhelperapp.HomeButtonFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Dropdown to Select Trip -->
+    <TextView
+        android:id="@+id/eventTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="casual"
+        android:paddingBottom="8dp"
+        android:text="Event Title"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeFragment" />
 
-        <!-- Display Event Information -->
-        <TextView
-            android:id="@+id/eventTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Event Title"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="8dp" />
+    <!-- Event Image -->
 
-        <TextView
-            android:id="@+id/Factors"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Factors"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+    <!-- Button to Add Event -->
 
-        <TextView
-            android:id="@+id/eventDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Event Description"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+    <TextView
+        android:id="@+id/eventFactors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="casual"
+        android:paddingBottom="8dp"
+        android:text="Factors"
+        android:textColor="#7C7C7C"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitle" />
 
-        <TextView
-            android:id="@+id/startTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start Time"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+    <TextView
+        android:id="@+id/eventDescription"
+        android:layout_width="353dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:fontFamily="casual"
+        android:paddingBottom="8dp"
+        android:text="Event Description"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeText" />
 
-        <TextView
-            android:id="@+id/endTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="End Time"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+    <TextView
+        android:id="@+id/eventLocation"
+        android:layout_width="329dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="casual"
+        android:paddingBottom="16dp"
+        android:text="Location"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/eventDescription"
+        app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
 
-        <TextView
-            android:id="@+id/eventLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Location"
-            android:textSize="16sp"
-            android:paddingBottom="16dp" />
+    <Spinner
+        android:id="@+id/tripDropdown"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="2dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/textNearCalendar"
+        app:layout_constraintEnd_toEndOf="@+id/eventFactors"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toEndOf="@+id/textNearCalendar"
+        app:layout_constraintTop_toTopOf="@+id/textNearCalendar" />
 
-        <!-- Dropdown to Select Trip -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Select a Trip:"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+    <ImageView
+        android:id="@+id/calendarButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventFactors"
+        app:srcCompat="@drawable/calendar_check" />
 
-        <Spinner
-            android:id="@+id/tripDropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown" />
+    <TextView
+        android:id="@+id/textNearCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="casual"
+        android:text="Add to trip"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendarButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/calendarButton"
+        app:layout_constraintTop_toTopOf="@+id/calendarButton" />
 
-        <!-- Event Image -->
-        <ImageView
-            android:id="@+id/eventImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/photoView"
+        android:layout_width="253dp"
+        android:layout_height="190dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarButton"
+        app:srcCompat="@drawable/ic_launcher_background" />
 
-        <!-- Button to Add Event -->
-        <Button
-            android:id="@+id/addToTripButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add to Trip"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal" />
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="casual"
+        android:text="Time"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photoView" />
 
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
