@@ -99,6 +99,7 @@ public class AddOwnerEvent extends BaseActivity {
 
         // Push to Firebase
         createEventBusinessOwner(event);
+        createEvent(event);
 
         // Show success message and navigate back
         Toast.makeText(this, "Event successfully created!", Toast.LENGTH_SHORT).show();
