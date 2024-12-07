@@ -110,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="12dp"
         android:fontFamily="casual"
         android:text="Factors:"
@@ -126,16 +126,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="232dp"
         android:fontFamily="casual"
         android:text="Date:"
         android:textAlignment="textStart"
         android:textColorLink="#ADACAC"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/searchDate"
         app:layout_constraintEnd_toStartOf="@+id/searchDate"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/factorsTextView2" />
+        app:layout_constraintTop_toTopOf="@+id/searchDate"
+        app:layout_constraintVertical_bias="0.615" />
 
     <CheckBox
         android:id="@+id/checkbox_notability2"
